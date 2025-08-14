@@ -28,7 +28,7 @@ format:
 [**Monitoreo de Modelos de Clasificación de Texto**]{.big-par .center-justified}
 [**Ciencia de Datos**]{.medium-par.center-justified}
 
-[**Abril 2025**]{.big-par .center-justified}
+[**Agosto 2025**]{.big-par .center-justified}
 
 
 ## [Contenidos]{.big-par}  
@@ -364,12 +364,6 @@ format:
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
-
-:::
-
 ::: {.incremental .medium-par}
 - **6) Priority Analysis:** **LORE**....
   - ...
@@ -386,7 +380,7 @@ format:
 :::
 
 ::: {.incremental .medium-par}
-- Los resultados entregados por Evidently pueden ser exportados como **HTML, JSON, etc**. Nosotros almacenamos ambos tipos de formato en **MinIO**.
+- Los resultados entregados por Evidently se exportan como **HTML, JSON, etc** y almacenan en **MinIO**.
 :::
 
 ::: {.r-stack fragment-index=2 .center}
@@ -497,7 +491,7 @@ format:
 [**Monitoreo de Modelos de Clasificación de Texto**]{.big-par .center-justified}
 [**Ciencia de Datos**]{.medium-par.center-justified}
 
-[**Abril 2025**]{.big-par .center-justified}
+[**Agosto 2025**]{.big-par .center-justified}
 
 
 []{.linea-superior} 
