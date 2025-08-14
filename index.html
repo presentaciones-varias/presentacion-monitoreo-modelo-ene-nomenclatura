@@ -499,7 +499,7 @@
 </div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)</strong>, aplicando varios tests y métricas proporcionadas por la librería open-source <a href="https://docs-old.evidentlyai.com/">Evidently</a>.</li>
+<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)</strong>, aplicando varios tests y reports implementados por la librería open-source <a href="https://docs-old.evidentlyai.com/">Evidently</a>.</li>
 </ul>
 </div>
 <div class="r-stack center" data-fragment-index="2">
@@ -510,55 +510,124 @@
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-1" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
-<div class="medium-par">
-<ul>
-<li class="fragment"><strong>1) Test Suite:</strong> creamos tests que hacen chequeos generales sobre columnas <strong>oficio, tareas y actividad </strong>(sólo CAENES).
-<ul>
-<li class="fragment">Tipos de columnas coindicen.</li>
-<li class="fragment">Número de columnas.</li>
-<li class="fragment">Número de columnas vacías.</li>
-<li class="fragment">Número de filas vacías.</li>
-<li class="fragment">Número de columnas duplicadas.</li>
-<li class="fragment">Número de registros faltantes.</li>
-</ul></li>
-</ul>
+<div class="small-par">
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 55%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Test / Report</th>
+<th style="text-align: left;">Evaluación</th>
+<th style="text-align: left;">Nivel <br> clase / dataset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Test Suite</td>
+<td style="text-align: left;">checks generales sobre columnas <strong>oficio, tareas y actividad </strong>(sólo CAENES)</td>
+<td style="text-align: left;">dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Text Summary</td>
+<td style="text-align: left;">estadísticas generales (mean, std, etc.) sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados sobre las columnas <strong>oficio, tareas y actividad </strong>(sólo CAENES).</td>
+<td style="text-align: left;">dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Text Drift</td>
+<td style="text-align: left;">drift sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados a las columnas <strong>oficio, tareas y actividad</strong> (sólo CAENES). <br> - <strong>Text Length</strong>: largo del texto en caracteres. <br> - <strong>Word Count</strong>: número de palabras en el texto.</td>
+<td style="text-align: left;">clase + dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Embedding Drift</td>
+<td style="text-align: left;">drift en los <strong>embeddings obtenidos para el dataset de producción y referencia</strong>, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo.</td>
+<td style="text-align: left;">clase + dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Drift</td>
+<td style="text-align: left;">drift en las <strong>classes predichas por del modelo</strong>.</td>
+<td style="text-align: left;">dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Drift vs Truth</td>
+<td style="text-align: left;">drift en las <strong>classes predichas por del modelo en el dataset de producción</strong> vs <strong>classes verdaderas en el dataset de referencia</strong>.</td>
+<td style="text-align: left;">dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Class Prob Drift</td>
+<td style="text-align: left;">drift en las <strong>probabilidades de las classes predichas por del modelo</strong>.</td>
+<td style="text-align: left;">clase + dataset</td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-2" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
-<div class="medium-par">
-<ul>
-<li class="fragment"><strong>2) Report Text Summary:</strong> calculamos estadísticas generales (mean, std, etc.) sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados sobre las columnas <strong>oficio, tareas y actividad </strong>(sólo CAENES).
-<ul>
-<li class="fragment"><strong>Text Length</strong>: largo del texto en caracteres.</li>
-<li class="fragment"><strong>Word Count</strong>: número de palabras en el texto.</li>
-</ul></li>
-</ul>
+<div class="small-par">
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 50%">
+<col style="width: 10%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Test / Report</th>
+<th style="text-align: left;">Método para evaluar drift score</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Report Text Drift</td>
+<td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
+<td style="text-align: left;">[0, +inf] <br> ??</td>
+<td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Embedding Drift</td>
+<td style="text-align: left;">- <strong>Clasificador binario</strong> para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.</td>
+<td style="text-align: left;">[0, 1]</td>
+<td style="text-align: left;">drift &gt; 0.55</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Drift</td>
+<td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>. <br> - Intuición: mide un <em>promedio</em> de todos los cambios en las frecuencias relativas de las categorías.</td>
+<td style="text-align: left;">[0, 1]</td>
+<td style="text-align: left;">drift ≥ 0.1</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Drift vs Truth</td>
+<td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>.</td>
+<td style="text-align: left;">[0, 1]</td>
+<td style="text-align: left;">drift ≥ 0.1</td>
+</tr>
+<tr>
+<td style="text-align: left;">Report Prediction Class Prob Drift</td>
+<td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
+<td style="text-align: left;">[0, +inf] <br> ??</td>
+<td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-3" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>3) Report Text Drift:</strong> evaluamos data drift sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados a las columnas <strong>oficio, tareas y actividad</strong> (sólo CAENES), usando el método de <strong>Wasserstein distance</strong>.
-<ul>
-<li class="fragment"><strong>Wasserstein distance</strong>: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de <em>trabajo</em> requerido para transformar una distribución en otra.
+<li class="fragment"><strong>1) Wasserstein distance</strong>: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de <em>trabajo</em> requerido para transformar una distribución en otra.
 <ul>
 <li class="fragment"><em>Trabajo</em> se refiere al costo de mover una unidad de masa de probabilidad.</li>
 <li class="fragment"><em>drift_score</em> en rango [0, +inf]:
 <ul>
 <li class="fragment">0 indica que las dos distribuciones son idénticas.</li>
-<li class="fragment"><em>&gt; threshold</em> es indicativo de data drift. Por defecto <em>threshold = 0.1</em></li>
-</ul></li>
+<li class="fragment"><em>&gt; threshold</em> es indicativo de drift. Por defecto <em>threshold = 0.1</em></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -569,14 +638,24 @@
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-4" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>4) Report Embedding Drift:</strong> evaluamos data drift en los <strong>embeddings obtenidos para el dataset de producción y referencia</strong>, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo.
+<li class="fragment"><strong>2) Kolmogorov–Smirnov (K-S) test</strong>: returns <em>p_value</em>…
 <ul>
-<li class="fragment">Se usa un <strong>clasificador binario</strong> para distinguir entre los embeddings calculados desde ambos datasets.</li>
+<li class="fragment"><em>drift_score</em> en rango …:
+<ul>
+<li class="fragment"><em>&lt; threshold</em> es indicativo de drift. Por defecto <em>threshold = 0.05</em></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="arquitectura-de-monitoreo-model-monitoring-metrics-5" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>3) Clasificador Binario</strong> usado para distinguir entre los embeddings calculados desde ambos datasets.
+<ul>
 <li class="fragment">Este clasificador retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.
 <ul>
 <li class="fragment"><em>drift_score</em> en rango [0, 1].</li>
@@ -590,23 +669,17 @@
 <p><img data-src="imagenes/monitoring/roc_curve_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-5" class="slide level2">
+<section id="arquitectura-de-monitoreo-model-monitoring-metrics-6" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>5) Report Prediction Drift:</strong> evaluamos data drift de las <strong>predicciones del modelo</strong>, usando el método de <strong>Jensen-Shannon distance</strong>.
-<ul>
-<li class="fragment"><strong>Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
+<li class="fragment"><strong>4) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
 <ul>
 <li class="fragment">Intuición: mide un <em>promedio</em> de todos los cambios en las frecuencias relativas de las categorías.</li>
 <li class="fragment"><em>drift_score</em> en rango [0, 1]:
 <ul>
 <li class="fragment">0 indica que las dos distribuciones son idénticas.</li>
 <li class="fragment"><em>&gt; threshold</em> es indicativo de data drift. Por defecto <em>threshold = 0.1</em></li>
-</ul></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -618,7 +691,7 @@
 <p><img data-src="imagenes/monitoring/jensen-shannon_distance_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-6" class="slide level2">
+<section id="arquitectura-de-monitoreo-model-monitoring-metrics-7" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
@@ -632,7 +705,7 @@
 </ul>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-7" class="slide level2">
+<section id="arquitectura-de-monitoreo-model-monitoring-metrics-8" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>

@@ -241,7 +241,7 @@ format:
 :::
 
 ::: {.incremental .medium-par}
-- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)**, aplicando varios tests y métricas proporcionadas por la librería open-source [Evidently](https://docs-old.evidentlyai.com/).
+- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)**, aplicando varios tests y reports implementados por la librería open-source [Evidently](https://docs-old.evidentlyai.com/).
 :::
 
 ::: {.r-stack fragment-index=2 .center}
@@ -258,55 +258,47 @@ format:
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
+::: {.small-par}
 
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
+| Test / Report                      | Evaluación | Nivel <br> clase / dataset |
+|:-----------------------------------|:------------|:------------|
+| Test Suite                         | checks generales sobre columnas **oficio, tareas y actividad **(sólo CAENES)      |  dataset    |
+| Report Text Summary                | estadísticas generales (mean, std, etc.) sobre los descriptores **Text Length** y **Word Count** aplicados sobre las columnas **oficio, tareas y actividad **(sólo CAENES). | dataset |
+| Report Text Drift                  | drift sobre los descriptores **Text Length** y **Word Count** aplicados a las columnas **oficio, tareas y actividad** (sólo CAENES). <br> - **Text Length**: largo del texto en caracteres. <br>  - **Word Count**: número de palabras en el texto. | clase + dataset |
+| Report Embedding Drift             | drift en los **embeddings obtenidos para el dataset de producción y referencia**, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo. |  clase + dataset |
+| Report Prediction Drift            | drift en las **classes predichas por del modelo**. | dataset |
+| Report Prediction Drift vs Truth   | drift en las **classes predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
+| Report Prediction Class Prob Drift | drift en las **probabilidades de las classes predichas por del modelo**. |  clase + dataset |
+: {tbl-colwidths="[25,55,20]"}
 
-:::
-
-::: {.incremental .medium-par}
-- **1) Test Suite:** creamos tests que hacen chequeos generales sobre columnas **oficio, tareas y actividad **(sólo CAENES).
-  - Tipos de columnas coindicen.
-  - Número de columnas.
-  - Número de columnas vacías.
-  - Número de filas vacías.
-  - Número de columnas duplicadas.
-  - Número de registros faltantes.
 :::
 
 
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
+::: {.small-par}
 
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
+| Test / Report                      | Método para evaluar drift score | Rango | Threshold | 
+|:-|:-|:-|:-|
+| Report Text Drift                  | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |  [0, +inf] <br> ?? | drift ≥ 0.1 <br> drift < 0.05
+| Report Embedding Drift             | - **Clasificador binario** para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de **ROC AUC como *drift_score***. | [0, 1] | drift > 0.55
+| Report Prediction Drift            | - **Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**. <br> - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías. | [0, 1] | drift ≥ 0.1
+| Report Prediction Drift vs Truth   | - **Jensen-Shannon distance**.     | [0, 1] | drift ≥ 0.1 
+| Report Prediction Class Prob Drift | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |   [0, +inf] <br> ?? | drift ≥ 0.1 <br> drift < 0.05
+: {tbl-colwidths="[25,50,10,15]"}
 
 :::
-
-::: {.incremental .medium-par}
-- **2) Report Text Summary:** calculamos estadísticas generales (mean, std, etc.) sobre los descriptores **Text Length** y **Word Count** aplicados sobre las columnas **oficio, tareas y actividad **(sólo CAENES).
-  - **Text Length**: largo del texto en caracteres.
-  - **Word Count**: número de palabras en el texto. 
-:::
-
 
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
-
-:::
-
 ::: {.incremental .medium-par}
-- **3) Report Text Drift:** evaluamos data drift sobre los descriptores **Text Length** y **Word Count** aplicados a las columnas **oficio, tareas y actividad** (sólo CAENES), usando el método de **Wasserstein distance**.
-  - **Wasserstein distance**: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de *trabajo* requerido para transformar una distribución en otra.
-      - *Trabajo* se refiere al costo de mover una unidad de masa de probabilidad.
-    - *drift_score* en rango [0, +inf]:
-      - 0 indica que las dos distribuciones son idénticas.
-      - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.1*
+- **1) Wasserstein distance**: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de *trabajo* requerido para transformar una distribución en otra.
+    - *Trabajo* se refiere al costo de mover una unidad de masa de probabilidad.
+  - *drift_score* en rango [0, +inf]:
+    - 0 indica que las dos distribuciones son idénticas.
+    - *> threshold* es indicativo de drift. Por defecto *threshold = 0.1*
 :::
 
 ::: {.r-stack fragment-index=2 .center}
@@ -318,15 +310,18 @@ format:
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
-
+::: {.incremental .medium-par}
+- **2) Kolmogorov–Smirnov (K-S) test**: returns *p_value*... 
+  - *drift_score* en rango ...:
+    - *< threshold* es indicativo de drift. Por defecto *threshold = 0.05* 
 :::
 
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+
 ::: {.incremental .medium-par}
-- **4) Report Embedding Drift:** evaluamos data drift en los **embeddings obtenidos para el dataset de producción y referencia**, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo.
-  - Se usa un **clasificador binario** para distinguir entre los embeddings calculados desde ambos datasets.
+- **3) Clasificador Binario** usado para distinguir entre los embeddings calculados desde ambos datasets.
   - Este clasificador retorna valores de **ROC AUC como *drift_score***.
     - *drift_score* en rango [0, 1].
     - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.55*
@@ -343,15 +338,8 @@ format:
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
-
-:::
-
 ::: {.incremental .medium-par}
-- **5) Report Prediction Drift:** evaluamos data drift de las **predicciones del modelo**, usando el método de **Jensen-Shannon distance**.
-  - **Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
+- **4) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
     - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías.
     - *drift_score* en rango [0, 1]:
       - 0 indica que las dos distribuciones son idénticas.
