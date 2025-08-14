@@ -372,6 +372,23 @@ format:
 
 
 
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
+
+:::
+
+::: {.incremental .medium-par}
+- **6) Priority Analysis:** **LORE**....
+  - ...
+:::
+
+
+
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
