@@ -499,7 +499,17 @@
 </div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)</strong>, aplicando varios tests y reports implementados por la librería open-source <a href="https://docs-old.evidentlyai.com/">Evidently</a>.</li>
+<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)</strong>:
+<ul>
+<li class="fragment">aplicando varias métricas de drift implementadas por la librería open-source <a href="https://docs-old.evidentlyai.com/">Evidently</a>.
+<ul>
+<li class="fragment">a nivel de cada clase (predicción / ground truth) y dataset.</li>
+</ul></li>
+<li class="fragment">aplicando otras métricas que creamos estimando novedad, incerteza y diversidad.
+<ul>
+<li class="fragment">a nivel de cada registro en el dataset.</li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 <div class="r-stack center" data-fragment-index="2">
@@ -521,7 +531,7 @@
 <tr>
 <th style="text-align: left;">Test / Report</th>
 <th style="text-align: left;">Evaluación</th>
-<th style="text-align: left;">Nivel <br> clase / dataset</th>
+<th style="text-align: left;">Nivel</th>
 </tr>
 </thead>
 <tbody>
@@ -559,6 +569,11 @@
 <td style="text-align: left;">Report Prediction Class Prob Drift</td>
 <td style="text-align: left;">drift en las <strong>probabilidades de las classes predichas por del modelo</strong>.</td>
 <td style="text-align: left;">clase + dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">Priority Analysis</td>
+<td style="text-align: left;">priority score basado en <strong>novedad, incerteza y diversidad</strong>.</td>
+<td style="text-align: left;">registro</td>
 </tr>
 </tbody>
 </table>
@@ -613,6 +628,12 @@
 <td style="text-align: left;">[0, +inf] <br> ??</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
+<tr>
+<td style="text-align: left;">Priority Analysis</td>
+<td style="text-align: left;">- ??</td>
+<td style="text-align: left;">??</td>
+<td style="text-align: left;">??</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -640,14 +661,18 @@
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>2) Kolmogorov–Smirnov (K-S) test</strong>: returns <em>p_value</em>…
+<li class="fragment"><strong>2) Kolmogorov–Smirnov (K-S) test</strong>: es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
 <ul>
-<li class="fragment"><em>drift_score</em> en rango …:
+<li class="fragment">La hipótesis nula es que las dos muestras vienen de la misma distribución y la prueba se aplica para rechazar o aceptar esta hipótesis.</li>
+<li class="fragment">Retorna <em>p_value</em> en rango [0, 1].
 <ul>
-<li class="fragment"><em>&lt; threshold</em> es indicativo de drift. Por defecto <em>threshold = 0.05</em></li>
+<li class="fragment">Si <em>p_value &lt; 0.05</em>, usualmente podemos declarar que hay evidencia para rechazar la hipótesis nula y considerar que las dos muestras son diferentes, es decir, que existe drift.</li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
+<div class="r-stack center" data-fragment-index="2">
+<p><img data-src="imagenes/monitoring/kolmogorov_smirnov_test_01.png" class="fragment" style="width:60.0%"></p>
 </div>
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-5" class="slide level2">
@@ -695,7 +720,7 @@
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>6) Priority Analysis:</strong> <strong>LORE</strong>….
+<li class="fragment"><strong>5) Priority Analysis:</strong> <strong>LORE</strong>….
 <ul>
 <li class="fragment">…</li>
 </ul></li>

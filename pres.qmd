@@ -241,7 +241,11 @@ format:
 :::
 
 ::: {.incremental .medium-par}
-- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)**, aplicando varios tests y reports implementados por la librería open-source [Evidently](https://docs-old.evidentlyai.com/).
+- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)**:
+  - aplicando varias métricas de drift implementadas por la librería open-source [Evidently](https://docs-old.evidentlyai.com/).
+    - a nivel de cada clase (predicción / ground truth) y dataset.
+  - aplicando otras métricas que creamos estimando novedad, incerteza y diversidad.
+    - a nivel de cada registro en el dataset.
 :::
 
 ::: {.r-stack fragment-index=2 .center}
@@ -260,7 +264,7 @@ format:
 
 ::: {.small-par}
 
-| Test / Report                      | Evaluación | Nivel <br> clase / dataset |
+| Test / Report                      | Evaluación | Nivel |
 |:-----------------------------------|:------------|:------------|
 | Test Suite                         | checks generales sobre columnas **oficio, tareas y actividad **(sólo CAENES)      |  dataset    |
 | Report Text Summary                | estadísticas generales (mean, std, etc.) sobre los descriptores **Text Length** y **Word Count** aplicados sobre las columnas **oficio, tareas y actividad **(sólo CAENES). | dataset |
@@ -269,6 +273,7 @@ format:
 | Report Prediction Drift            | drift en las **classes predichas por del modelo**. | dataset |
 | Report Prediction Drift vs Truth   | drift en las **classes predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
 | Report Prediction Class Prob Drift | drift en las **probabilidades de las classes predichas por del modelo**. |  clase + dataset |
+| Priority Analysis | priority score basado en **novedad, incerteza y diversidad**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
 :::
@@ -286,6 +291,7 @@ format:
 | Report Prediction Drift            | - **Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**. <br> - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías. | [0, 1] | drift ≥ 0.1
 | Report Prediction Drift vs Truth   | - **Jensen-Shannon distance**.     | [0, 1] | drift ≥ 0.1 
 | Report Prediction Class Prob Drift | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |   [0, +inf] <br> ?? | drift ≥ 0.1 <br> drift < 0.05
+| Priority Analysis | - ?? | ?? | ??
 : {tbl-colwidths="[25,50,10,15]"}
 
 :::
@@ -311,11 +317,17 @@ format:
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **2) Kolmogorov–Smirnov (K-S) test**: returns *p_value*... 
-  - *drift_score* en rango ...:
-    - *< threshold* es indicativo de drift. Por defecto *threshold = 0.05* 
+- **2) Kolmogorov–Smirnov (K-S) test**: es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
+  - La hipótesis nula es que las dos muestras vienen de la misma distribución y la prueba se aplica para rechazar o aceptar esta hipótesis.
+  - Retorna *p_value* en rango [0, 1]. 
+    - Si *p_value < 0.05*, usualmente podemos declarar que hay evidencia para rechazar la hipótesis nula y considerar que las dos muestras son diferentes, es decir, que existe drift.
 :::
 
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/kolmogorov_smirnov_test_01.png){.fragment width="60%"}
+
+:::
 
 
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
@@ -365,7 +377,7 @@ format:
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **6) Priority Analysis:** **LORE**....
+- **5) Priority Analysis:** **LORE**....
   - ...
 :::
 
