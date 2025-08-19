@@ -246,7 +246,7 @@ format:
     - a nivel de cada clase (predicción / ground truth) y dataset.
   - aplicando otras métricas que creamos estimando novedad, incerteza y diversidad.
     - a nivel de cada registro en el dataset.
-- **Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada** que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas...
+- **Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada** que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas para su revisión...
 - Las diferentes métricas calculadas se almacenan en **MinIO** como archivos **html, json, parquet**.
 :::
 
