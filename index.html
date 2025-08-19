@@ -501,7 +501,7 @@
 <ul>
 <li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)</strong>:
 <ul>
-<li class="fragment">aplicando varias métricas de drift implementadas por la librería open-source <a href="https://docs-old.evidentlyai.com/">Evidently</a>.
+<li class="fragment">aplicando varias métricas de drift implementadas por la librería open-source <a href="https://docs.evidentlyai.com/metrics/customize_data_drift">Evidently</a>.
 <ul>
 <li class="fragment">a nivel de cada clase (predicción / ground truth) y dataset.</li>
 </ul></li>
@@ -510,12 +510,9 @@
 <li class="fragment">a nivel de cada registro en el dataset.</li>
 </ul></li>
 </ul></li>
+<li class="fragment"><strong>Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada</strong> que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas…</li>
+<li class="fragment">Las diferentes métricas calculadas se almacenan en <strong>MinIO</strong> como archivos <strong>html, json, parquet</strong>.</li>
 </ul>
-</div>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/evidently_github_03.png" class="fragment fade-in-then-out" style="width:50.0%"></p>
-<p><img data-src="imagenes/monitoring/evidently_github_01.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
-<p><img data-src="imagenes/monitoring/evidently_release_01.png" class="fragment" style="width:50.0%"></p>
 </div>
 </section>
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-1" class="slide level2">
@@ -630,7 +627,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">Priority Analysis</td>
-<td style="text-align: left;">- ??</td>
+<td style="text-align: left;">- novelty_score <br> - uncertainty_score <br> - diversity_score <br> - priority_score: suma ponderada de novelty_score, uncertainty_score, diversity_score.</td>
 <td style="text-align: left;">??</td>
 <td style="text-align: left;">??</td>
 </tr>
@@ -698,7 +695,7 @@
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>4) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
+<li class="fragment"><strong>4) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>…
 <ul>
 <li class="fragment">Intuición: mide un <em>promedio</em> de todos los cambios en las frecuencias relativas de las categorías.</li>
 <li class="fragment"><em>drift_score</em> en rango [0, 1]:
@@ -722,24 +719,49 @@
 <ul>
 <li class="fragment"><strong>5) Priority Analysis:</strong> <strong>LORE</strong>….
 <ul>
-<li class="fragment">…</li>
+<li class="fragment">Novelty score: estima novedad de registros en base a…</li>
+<li class="fragment">Uncertainty score: estima incerteza de registros en base a…</li>
+<li class="fragment">Diversity score: estima diversidad de registros en base a…</li>
 </ul></li>
 </ul>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-8" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
-</div>
+<section id="arquitectura-de-monitoreo-model-monitoring-combined-metric" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Combined metric</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment">Los resultados entregados por Evidently se exportan como <strong>HTML, JSON, etc</strong> y almacenan en <strong>MinIO</strong>.</li>
+<li class="fragment"><strong>Priority score:</strong>
+<ul>
+<li class="fragment">Suma ponderada de novelty_score, uncertainty_score, diversity_score.</li>
+</ul></li>
+<li class="fragment"><strong>Drift score:</strong>
+<ul>
+<li class="fragment">Suma ponderada de multiples drift scores: embeddings, prediction, prediction vs truth, prediction class probability.</li>
+</ul></li>
+<li class="fragment"><strong>Revision score:</strong>
+<ul>
+<li class="fragment">Suma ponderada de priority_score y drift_score.</li>
+<li class="fragment">Nos permite seleccionar qué registros del periodo analizado (coyuntura) es importante revisar…</li>
+</ul></li>
 </ul>
 </div>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/minio_files_03.png" class="fragment" style="width:80.0%"></p>
-</div>
+<!-- ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/monitoring_pipeline_stages_03.png){.fragment width="50%"}
+
+:::
+
+::: {.incremental .medium-par}
+- Los resultados entregados por Evidently se exportan como **HTML, JSON, etc** y almacenan en **MinIO**.
+:::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/minio_files_03.png){.fragment width="80%"}
+
+::: -->
 <!-- ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}

@@ -242,20 +242,12 @@ format:
 
 ::: {.incremental .medium-par}
 - **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento)**:
-  - aplicando varias métricas de drift implementadas por la librería open-source [Evidently](https://docs-old.evidentlyai.com/).
+  - aplicando varias métricas de drift implementadas por la librería open-source [Evidently](https://docs.evidentlyai.com/metrics/customize_data_drift).
     - a nivel de cada clase (predicción / ground truth) y dataset.
   - aplicando otras métricas que creamos estimando novedad, incerteza y diversidad.
     - a nivel de cada registro en el dataset.
-:::
-
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/evidently_github_03.png){.fragment .fade-in-then-out width="50%"}
-
-![](imagenes/monitoring/evidently_github_01.png){.fragment .fade-in-then-out width="100%"}
-
-![](imagenes/monitoring/evidently_release_01.png){.fragment width="50%"}
-
+- **Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada** que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas...
+- Las diferentes métricas calculadas se almacenan en **MinIO** como archivos **html, json, parquet**.
 :::
 
 
@@ -291,7 +283,7 @@ format:
 | Report Prediction Drift            | - **Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**. <br> - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías. | [0, 1] | drift ≥ 0.1
 | Report Prediction Drift vs Truth   | - **Jensen-Shannon distance**.     | [0, 1] | drift ≥ 0.1 
 | Report Prediction Class Prob Drift | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |   [0, +inf] <br> ?? | drift ≥ 0.1 <br> drift < 0.05
-| Priority Analysis | - ?? | ?? | ??
+| Priority Analysis | - novelty_score <br> - uncertainty_score <br> - diversity_score <br> - priority_score: suma ponderada de novelty_score, uncertainty_score, diversity_score. | ?? | ??
 : {tbl-colwidths="[25,50,10,15]"}
 
 :::
@@ -351,7 +343,7 @@ format:
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **4) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
+- **4) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**...
     - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías.
     - *drift_score* en rango [0, 1]:
       - 0 indica que las dos distribuciones son idénticas.
@@ -372,18 +364,32 @@ format:
 
 
 
-
-
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
 - **5) Priority Analysis:** **LORE**....
-  - ...
+  - Novelty score: estima novedad de registros en base a...
+  - Uncertainty score: estima incerteza de registros en base a...
+  - Diversity score: estima diversidad de registros en base a...
 :::
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura de Monitoreo | Model monitoring | Combined metric]{.big-par}
+
+::: {.incremental .medium-par}
+- **Priority score:**
+  - Suma ponderada de novelty_score, uncertainty_score, diversity_score.
+- **Drift score:**
+  - Suma ponderada de multiples drift scores: embeddings, prediction, prediction vs truth, prediction class probability.
+- **Revision score:**
+  - Suma ponderada de priority_score y drift_score.
+  - Nos permite seleccionar qué registros del periodo analizado (coyuntura) es importante revisar...
+:::
+
+
+
+<!-- ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -399,7 +405,7 @@ format:
 
 ![](imagenes/monitoring/minio_files_03.png){.fragment width="80%"}
 
-:::
+::: -->
 
 
 <!-- ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
