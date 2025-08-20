@@ -505,7 +505,7 @@
 <ul>
 <li class="fragment">a nivel de cada clase (predicción / ground truth) y dataset.</li>
 </ul></li>
-<li class="fragment">aplicando otras métricas que creamos estimando novedad, incerteza y diversidad.
+<li class="fragment">aplicando otras métricas creadas como proxy para estimar novedad, incerteza y diversidad de los registros.
 <ul>
 <li class="fragment">a nivel de cada registro en el dataset.</li>
 </ul></li>
@@ -719,9 +719,9 @@
 <ul>
 <li class="fragment"><strong>5) Priority Analysis:</strong> <strong>LORE</strong>….
 <ul>
-<li class="fragment">Novelty score: estima novedad de registros en base a…</li>
+<li class="fragment">Novelty score: métrica obtenida combinando la similitud coseno (cosine similarity) y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia…</li>
 <li class="fragment">Uncertainty score: estima incerteza de registros en base a…</li>
-<li class="fragment">Diversity score: estima diversidad de registros en base a…</li>
+<li class="fragment">Diversity score: métrica obtenida…kmeans…embeddings…distancia a centros de clústers…</li>
 </ul></li>
 </ul>
 </div>
