@@ -546,10 +546,28 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **5) Priority Analysis:** **LORE**....
-  - Novelty score: métrica obtenida combinando la similitud coseno (cosine similarity) y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia...
-  - Uncertainty score: estima incerteza de registros en base a...
-  - Diversity score: métrica obtenida...kmeans...embeddings...distancia a centros de clústers...
+- **5) Priority Analysis:** 
+  - **Novelty score:** Detecta ejemplos semánticamente diferentes al conjunto de referencia. Combina similitud coseno y la minima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
+  
+    - novelty_score = (1 - max_cosine_similarity + min_euclidean_distance_norm) / 2
+  
+  - **Uncertainty score:** Identifica ejemplos con baja confianza basándose en las probabilidades de predicción del modelo.
+  
+    - uncertainty_score = 1 - prediction_probability
+
+  - **Diversity score:** Métrica basada en K-Means clustering que mide la distancia de cada ejemplo a su centro de cluster más cercano. Asegura diversidad en los ejemplos seleccionados.
+  
+    - Proceso:
+    1. Aplicar K-Means clustering a los embeddings actuales
+    2. Para cada ejemplo, calcular distancia euclidiana a su centroide
+    3. Normalizar distancias (0-1)
+  
+  - **Formula final:**
+  
+    - priority_score = w₁×novelty_norm + w₂×uncertainty_norm + w₃×diversity_norm
+  
+    - Pesos por defecto: w₁=0.4, w₂=0.4, w₃=0.2
+
 :::
 
 

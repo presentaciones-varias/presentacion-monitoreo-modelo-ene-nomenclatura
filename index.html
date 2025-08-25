@@ -8,7 +8,7 @@
 <link href="pres_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="pres_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="pres_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.55">
+  <meta name="generator" content="quarto-1.5.57">
 
   <title>pres</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -540,39 +540,39 @@
 <col style="width: 20%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Report</th>
 <th style="text-align: left;">Evaluación</th>
 <th style="text-align: left;">Nivel</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Text Drift</td>
 <td style="text-align: left;">drift sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados a las columnas <strong>oficio, tareas y actividad</strong> (sólo CAENES). <br> - <strong>Text Length</strong>: largo del texto en caracteres. <br> - <strong>Word Count</strong>: número de palabras en el texto.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Embedding Drift</td>
 <td style="text-align: left;">drift en los <strong>embeddings obtenidos para el dataset de producción y referencia</strong>, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Drift</td>
 <td style="text-align: left;">drift en las <strong>clases predichas por del modelo</strong>.</td>
 <td style="text-align: left;">dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Prediction Drift vs Truth</td>
 <td style="text-align: left;">drift en las <strong>clases predichas por del modelo en el dataset de producción</strong> vs <strong>classes verdaderas en el dataset de referencia</strong>.</td>
 <td style="text-align: left;">dataset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Class Prob Drift</td>
 <td style="text-align: left;">drift en las <strong>probabilidades de las clases predichas por del modelo</strong>.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Drift Priority</td>
 <td style="text-align: left;">priority score basado en <strong>novedad, incerteza y diversidad</strong>.</td>
 <td style="text-align: left;">registro</td>
@@ -592,7 +592,7 @@
 <col style="width: 15%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Report</th>
 <th style="text-align: left;">Método para evaluar drift</th>
 <th style="text-align: left;">Rango</th>
@@ -600,37 +600,37 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Text Drift</td>
 <td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
 <td style="text-align: left;">[0, +inf] <br> ??</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Embedding Drift</td>
 <td style="text-align: left;">- <strong>Clasificador binario</strong> para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift &gt; 0.55</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Drift</td>
 <td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Prediction Drift vs Truth</td>
 <td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Class Prob Drift</td>
 <td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
 <td style="text-align: left;">[0, +inf] <br> [0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Drift Priority</td>
 <td style="text-align: left;">- uncertainty_score_norm <br> - novelty_score_norm <br> - diversity_score_norm</td>
 <td style="text-align: left;">[0, 1] <br> [0, 1] <br> [0, 1]</td>
@@ -681,7 +681,7 @@
 <col style="width: 10%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Metric</th>
 <th style="text-align: left;">Weight</th>
 <th style="text-align: left;">Metric</th>
@@ -690,14 +690,14 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm</td>
 <td style="text-align: left;">0.2 <br> 0.4 <br> 0.4</td>
 <td style="text-align: left;"><br><br> <strong>priority_score</strong></td>
 <td style="text-align: left;"><br><br> 0.5</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm</td>
 <td style="text-align: left;">0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826</td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>drift_score</strong></td>
@@ -895,15 +895,34 @@
 <p><img data-src="imagenes/monitoring/jensen-shannon_distance_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
-<section id="apéndice-metrics-4" class="slide level2">
+<section id="apéndice-metrics-4" class="slide level2 scrollable">
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>5) Priority Analysis:</strong> <strong>LORE</strong>….
+<li class="fragment"><strong>5) Priority Analysis:</strong>
 <ul>
-<li class="fragment">Novelty score: métrica obtenida combinando la similitud coseno (cosine similarity) y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia…</li>
-<li class="fragment">Uncertainty score: estima incerteza de registros en base a…</li>
-<li class="fragment">Diversity score: métrica obtenida…kmeans…embeddings…distancia a centros de clústers…</li>
+<li class="fragment"><p><strong>Novelty score:</strong> Detecta ejemplos semánticamente diferentes al conjunto de referencia. Combina similitud coseno y la minima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.</p>
+<ul>
+<li class="fragment">novelty_score = (1 - max_cosine_similarity + min_euclidean_distance_norm) / 2</li>
+</ul></li>
+<li class="fragment"><p><strong>Uncertainty score:</strong> Identifica ejemplos con baja confianza basándose en las probabilidades de predicción del modelo.</p>
+<ul>
+<li class="fragment">uncertainty_score = 1 - prediction_probability</li>
+</ul></li>
+<li class="fragment"><p><strong>Diversity score:</strong> Métrica basada en K-Means clustering que mide la distancia de cada ejemplo a su centro de cluster más cercano. Asegura diversidad en los ejemplos seleccionados.</p>
+<ul>
+<li class="fragment">Proceso:</li>
+</ul>
+<ol type="1">
+<li class="fragment">Aplicar K-Means clustering a los embeddings actuales</li>
+<li class="fragment">Para cada ejemplo, calcular distancia euclidiana a su centroide</li>
+<li class="fragment">Normalizar distancias (0-1)</li>
+</ol></li>
+<li class="fragment"><p><strong>Formula final:</strong></p>
+<ul>
+<li class="fragment"><p>priority_score = w₁×novelty_norm + w₂×uncertainty_norm + w₃×diversity_norm</p></li>
+<li class="fragment"><p>Pesos por defecto: w₁=0.4, w₂=0.4, w₃=0.2</p></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
