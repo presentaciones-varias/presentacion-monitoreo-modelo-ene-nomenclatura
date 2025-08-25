@@ -699,7 +699,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm</td>
-<td style="text-align: left;">0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826</td>
+<td style="text-align: left;">0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04</td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>drift_score</strong></td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5</td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>revision_score</strong></td>
@@ -707,6 +707,88 @@
 </tbody>
 </table>
 </div>
+</section>
+<section id="arquitectura-de-monitoreo-model-monitoring-metrics-5" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<div class="small-par">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 60%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm</td>
+<td style="text-align: left;">0.2 <br> 0.4 <br> 0.4</td>
+<td style="text-align: left;"><br> <strong>priority_score</strong></td>
+<td style="text-align: left;"><br> 0.5</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm</td>
+<td style="text-align: left;">0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04</td>
+<td style="text-align: left;"><br><br><br><br><br><br><br> <strong>drift_score</strong></td>
+<td style="text-align: left;"><br><br><br><br><br><br><br> 0.5</td>
+<td style="text-align: left;"><br><br> <strong>revision_score</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="arquitectura-de-monitoreo-model-monitoring-revisión" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revisión</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>Cómo planeamos estimar la validez de las métricas que calculamos?</strong>
+<ul>
+<li class="fragment">Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyuntura) para ser revisado por analistas expertos…</li>
+<li class="fragment">Criterios utilizados en la selección:
+<ul>
+<li class="fragment">Debe contener registros observados en los valores más altos y más bajos del <strong>revision_score</strong>, ordenados aleatoriamente.</li>
+<li class="fragment">Distribución de clases…como en dataset de producción analizado…</li>
+</ul></li>
+<li class="fragment">Colaboración de analistas:
+<ul>
+<li class="fragment">Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
+<ul>
+<li class="fragment">Esto permite contar con una clasificación independiente…</li>
+</ul></li>
+<li class="fragment">Los analistas además responderán un par de preguntas que nos permitirán evaluar la <strong>complejidad</strong> y <strong>novedad</strong> de los registros seleccionados, a partir de conocimiento experto.</li>
+</ul></li>
+<li class="fragment">Siguientes pasos:
+<ul>
+<li class="fragment">Tras la revisión, analizaremos … entre clasificación, complejidad y novedad asignadas por analistas y nuestras métricas…</li>
+<li class="fragment">Si tras el análisis, concluimos que nuestras métricas tienen validez, podemos evaluar el cambio en la performance del modelo incluyendo las mismas muestras seleccionadas en el entrenamiento para decidir si es conveniente realizar un re-entrenamiento del mismo…<br>
+</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<!-- ## [Trabajo futuro / Discusión]{.big-par}
+
+::: {.incremental .medium-par}
+- De los resultados obtenidos hasta el momento, vemos evidencia de data drift en:
+  - CIUO para **Text Length** y **Word Count** de columna **tareas**.
+    - Significativo para considerar reentrenar el modelo? 
+  - CAENES para **Text Length** y **Word Count** de columna **tareas**, pero también para los **Embeddings**.
+    - Caso más significativo, ya que la relación semántica de las palabras en las glosas puede haber cambiado. 
+  - De todas maneras, podemos realizar tests adicionales con otras métricas para confirmar los resultados y decidir si conviene reentrenar los modelos. 
+- Intentar obtener etiquetas de una muestra del dataset de producción, para así evaluar la peformance de los modelos en el tiempo (accuracy, etc). 
+- Integrar a la arquitectura el re-entrenamiento de modelos.
+  - Sujeto a criterios basados en los resultados obtenidos para las métricas de monitoreo. 
+::: -->
 <!-- ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
@@ -783,30 +865,6 @@
 <div class="center">
 <p><a href="http://10.90.10.60:8050/">Veamos el dashboard</a></p>
 </div>
-</div>
-</section>
-<section id="trabajo-futuro-discusión" class="slide level2">
-<h2><span class="big-par">Trabajo futuro / Discusión</span></h2>
-<div class="medium-par">
-<ul>
-<li class="fragment">De los resultados obtenidos hasta el momento, vemos evidencia de data drift en:
-<ul>
-<li class="fragment">CIUO para <strong>Text Length</strong> y <strong>Word Count</strong> de columna <strong>tareas</strong>.
-<ul>
-<li class="fragment">Significativo para considerar reentrenar el modelo?</li>
-</ul></li>
-<li class="fragment">CAENES para <strong>Text Length</strong> y <strong>Word Count</strong> de columna <strong>tareas</strong>, pero también para los <strong>Embeddings</strong>.
-<ul>
-<li class="fragment">Caso más significativo, ya que la relación semántica de las palabras en las glosas puede haber cambiado.</li>
-</ul></li>
-<li class="fragment">De todas maneras, podemos realizar tests adicionales con otras métricas para confirmar los resultados y decidir si conviene reentrenar los modelos.</li>
-</ul></li>
-<li class="fragment">Intentar obtener etiquetas de una muestra del dataset de producción, para así evaluar la peformance de los modelos en el tiempo (accuracy, etc).</li>
-<li class="fragment">Integrar a la arquitectura el re-entrenamiento de modelos.
-<ul>
-<li class="fragment">Sujeto a criterios basados en los resultados obtenidos para las métricas de monitoreo.</li>
-</ul></li>
-</ul>
 </div>
 </section></section>
 <section>

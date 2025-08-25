@@ -11,6 +11,8 @@ format:
     logo: imagenes/logo_portada2.png
     css: ine_quarto_styles.css
     # footer: <https://quarto.org>
+# header-includes:
+#   - \usepackage{tabularray}
 ---
 
 #
@@ -333,10 +335,59 @@ format:
 | Metric | Weight | Metric | Weight | Metric
 |:-|:-|:-|:-|:-|
 | uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm | 0.2 <br> 0.4 <br> 0.4 | <br><br> **priority_score** | <br><br> 0.5 
-| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.08695652 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 <br> 0.04347826 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **revision_score**
+| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **revision_score**
 : {tbl-colwidths="[60,10,10,10,10]"}
 
 :::
+
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+
+::: {.small-par}
+
+| Metric | Weight | Metric | Weight | Metric
+|:-|:-|:-|:-|:-|
+| uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm | 0.2 <br> 0.4 <br> 0.4 | <br> **priority_score** | <br> 0.5 
+| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br> 0.5 | <br><br> **revision_score**
+: {tbl-colwidths="[60,10,10,10,10]"}
+
+:::
+
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Revisión]{.big-par}
+
+::: {.incremental .medium-par}
+- **Cómo planeamos estimar la validez de las métricas que calculamos?**
+  - Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyuntura) para ser revisado por analistas expertos...
+  - Criterios utilizados en la selección:
+    - Debe contener registros observados en los valores más altos y más bajos del **revision_score**, ordenados aleatoriamente.
+    - Distribución de clases...como en dataset de producción analizado...
+  - Colaboración de analistas:
+    - Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
+      - Esto permite contar con una clasificación independiente...
+    - Los analistas además responderán un par de preguntas que nos permitirán evaluar la **complejidad** y **novedad** de los registros seleccionados, a partir de conocimiento experto.
+  - Siguientes pasos:
+    - Tras la revisión, analizaremos ... entre clasificación, complejidad y novedad asignadas por analistas y nuestras métricas... 
+    - Si tras el análisis, concluimos que nuestras métricas tienen validez, podemos evaluar el cambio en la performance del modelo incluyendo las mismas muestras seleccionadas en el entrenamiento para decidir si es conveniente realizar un re-entrenamiento del mismo...  
+:::
+
+
+
+<!-- ## [Trabajo futuro / Discusión]{.big-par}
+
+::: {.incremental .medium-par}
+- De los resultados obtenidos hasta el momento, vemos evidencia de data drift en:
+  - CIUO para **Text Length** y **Word Count** de columna **tareas**.
+    - Significativo para considerar reentrenar el modelo? 
+  - CAENES para **Text Length** y **Word Count** de columna **tareas**, pero también para los **Embeddings**.
+    - Caso más significativo, ya que la relación semántica de las palabras en las glosas puede haber cambiado. 
+  - De todas maneras, podemos realizar tests adicionales con otras métricas para confirmar los resultados y decidir si conviene reentrenar los modelos. 
+- Intentar obtener etiquetas de una muestra del dataset de producción, para así evaluar la peformance de los modelos en el tiempo (accuracy, etc). 
+- Integrar a la arquitectura el re-entrenamiento de modelos.
+  - Sujeto a criterios basados en los resultados obtenidos para las métricas de monitoreo. 
+::: -->
 
 
 
@@ -435,20 +486,6 @@ format:
 
 ::: {.center}
 [Veamos el dashboard](http://10.90.10.60:8050/)
-:::
-
-## [Trabajo futuro / Discusión]{.big-par}
-
-::: {.incremental .medium-par}
-- De los resultados obtenidos hasta el momento, vemos evidencia de data drift en:
-  - CIUO para **Text Length** y **Word Count** de columna **tareas**.
-    - Significativo para considerar reentrenar el modelo? 
-  - CAENES para **Text Length** y **Word Count** de columna **tareas**, pero también para los **Embeddings**.
-    - Caso más significativo, ya que la relación semántica de las palabras en las glosas puede haber cambiado. 
-  - De todas maneras, podemos realizar tests adicionales con otras métricas para confirmar los resultados y decidir si conviene reentrenar los modelos. 
-- Intentar obtener etiquetas de una muestra del dataset de producción, para así evaluar la peformance de los modelos en el tiempo (accuracy, etc). 
-- Integrar a la arquitectura el re-entrenamiento de modelos.
-  - Sujeto a criterios basados en los resultados obtenidos para las métricas de monitoreo. 
 :::
 
 
