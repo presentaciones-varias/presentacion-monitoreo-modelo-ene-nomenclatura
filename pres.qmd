@@ -547,28 +547,30 @@ format:
 
 ::: {.incremental .medium-par}
 - **5) Priority Analysis:** 
-  - **Novelty score:** Detecta ejemplos semánticamente diferentes al conjunto de referencia. Combina similitud coseno y la minima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
-  
-    - novelty_score = (1 - max_cosine_similarity + min_euclidean_distance_norm) / 2
-  
-  - **Uncertainty score:** Identifica ejemplos con baja confianza basándose en las probabilidades de predicción del modelo.
-  
-    - uncertainty_score = 1 - prediction_probability
-
-  - **Diversity score:** Métrica basada en K-Means clustering que mide la distancia de cada ejemplo a su centro de cluster más cercano. Asegura diversidad en los ejemplos seleccionados.
-  
-    - Proceso:
-    1. Aplicar K-Means clustering a los embeddings actuales
-    2. Para cada ejemplo, calcular distancia euclidiana a su centroide
-    3. Normalizar distancias (0-1)
-  
-  - **Formula final:**
-  
-    - priority_score = w₁×novelty_norm + w₂×uncertainty_norm + w₃×diversity_norm
-  
-    - Pesos por defecto: w₁=0.4, w₂=0.4, w₃=0.2
-
+  - **Novelty score:** Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
+  $$
+  \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
+  $$
+  - **Uncertainty score:** Es una medida de la baja confianza de los registros del dataset de producción, estimada en base a las probabilidades de predicción del modelo.
+  $$
+  \small uncertainty\_score = 1 - prediction\_probability
+  $$
+  - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
+    1. Aplicar K-Means clustering a los embeddings de los registros de producción.
+    2. Para cada registro, calcular distancia euclidiana a su centroide.
+  - **Priority score:**
+    - Se normalizan las tres métricas anteriores usando la fórmula: <br> 
+    $$
+    \small
+    metric = \frac{metric - min(metric)}{max(metric) - min(metric)}
+    $$
+    - Luego usamos las métricas normalizadas para calcular:
+    $$
+    \small priority\_score = w_1 \times uncertainty\_score\_norm \\ 
+    \small \hspace{2.6cm} + w_2 \times novelty\_score\_norm \\
+    \small \hspace{3.1cm} + w_3 \times diversity\_score\_norm
+    $$
+    - donde usamos por defecto los pesos: 
+    $$ \small w_1=0.2, w_2=0.4, w_3=0.4 $$
 :::
-
-
 
