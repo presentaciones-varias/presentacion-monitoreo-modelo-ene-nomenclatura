@@ -499,7 +499,7 @@
 </div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento) aplicando múltiples métricas de drift.</strong>:
+<li class="fragment"><strong>Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento) aplicando múltiples métricas de drift</strong>:
 <ul>
 <li class="fragment">Algunas implementadas por la librería open-source <a href="https://docs.evidentlyai.com/metrics/customize_data_drift">Evidently</a>.
 <ul>
@@ -507,10 +507,13 @@
 </ul></li>
 <li class="fragment">Otras implementadas a medida, como proxy para estimar la incerteza y novedad de los registros.
 <ul>
-<li class="fragment">a nivel de cada registro en el dataset.</li>
+<li class="fragment">a nivel de cada registro.</li>
 </ul></li>
 </ul></li>
-<li class="fragment"><strong>Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada</strong> que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas para su revisión…</li>
+<li class="fragment"><strong>Combinando las diferentes métricas obtenidas, calculamos una métrica única</strong>.
+<ul>
+<li class="fragment">nos permite seleccionar un subconjunto de registros para ser enviado a revisión.</li>
+</ul></li>
 <li class="fragment">Las diferentes métricas calculadas se almacenan en <strong>MinIO</strong> como archivos <strong>html, json, parquet</strong>.</li>
 </ul>
 </div>
@@ -594,7 +597,7 @@
 <thead>
 <tr>
 <th style="text-align: left;">Report</th>
-<th style="text-align: left;">Método para evaluar drift</th>
+<th style="text-align: left;">Métrica para evaluar drift</th>
 <th style="text-align: left;">Rango</th>
 <th style="text-align: left;">Threshold</th>
 </tr>
@@ -603,7 +606,7 @@
 <tr>
 <td style="text-align: left;">Text Drift</td>
 <td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
-<td style="text-align: left;">[0, +inf] <br> ??</td>
+<td style="text-align: left;">[0, +inf] <br> [0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
 <tr>
@@ -644,9 +647,9 @@
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Cómo calculamos una única métrica que combine las diversas métricas usadas?</strong>
+<li class="fragment"><strong>Cómo calculamos una única métrica a partir de las múltiples métricas aplicadas?</strong>
 <ul>
-<li class="fragment">Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro / clase, dataset) y luego para obtener una métrica final de revisión.</li>
+<li class="fragment">Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro, clase, dataset) y luego para obtener una métrica final de revisión.</li>
 </ul></li>
 <li class="fragment"><strong>Record drift score:</strong>
 <ul>
@@ -654,7 +657,7 @@
 </ul></li>
 <li class="fragment"><strong>Class drift score:</strong>
 <ul>
-<li class="fragment">Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidaades de las clases predichas.</li>
+<li class="fragment">Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidades de las clases predichas.</li>
 </ul></li>
 <li class="fragment"><strong>Revision score:</strong>
 <ul>
@@ -712,22 +715,62 @@
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Cómo planeamos estimar la validez de las métricas que calculamos?</strong>
+<li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
 <ul>
-<li class="fragment">Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyunturas) para ser revisado por analistas expertos.</li>
-<li class="fragment">Criterios utilizados en la selección:
+<li class="fragment">Seleccionamos un subconjunto de registros para cada periodo de interés (ej: coyunturas) para ser revisado por analistas expertos.</li>
+<li class="fragment">Criterios utilizados en cada selección:
 <ul>
-<li class="fragment">Contiene registros observados en los valores más altos y más bajos del <strong>revision_score</strong>, ordenados aleatoriamente.</li>
-<li class="fragment">Distribución de clases (predichas) es la misma que en el dataset de producción analizado del periodo analizado.</li>
+<li class="fragment">Contiene registros observados en los valores más altos y más bajos del <strong>revision_score</strong> en el periodo, ordenados aleatoriamente.</li>
+<li class="fragment">Su distribución de clases (predichas) es la misma que en el dataset de producción del periodo.</li>
+<li class="fragment">Pensamos en ~100 registros por coyuntura.</li>
 </ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="arquitectura-de-monitoreo-model-monitoring-revision-1" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
+<ul>
 <li class="fragment">Colaboración de analistas:
 <ul>
-<li class="fragment">Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
+<li class="fragment">Dos analistas clasificarían el mismo subconjunto de registros seleccionados.
 <ul>
 <li class="fragment">Permite contar con una clasificación independiente.</li>
 </ul></li>
-<li class="fragment">Los analistas además responderán un par de preguntas que nos permitirán evaluar la <strong>complejidad</strong> y <strong>novedad</strong> de los registros seleccionados, a partir de su conocimiento experto.</li>
+<li class="fragment">Los analistas además responderían un par de preguntas que nos permitirán evaluar la <strong>complejidad</strong> y <strong>novedad</strong> de los registros, a partir de su conocimiento experto.
+<ul>
+<li class="fragment"><strong>Q1. En relación al tiempo que se tarda usualmente en codificar un registro, este registro le tomó:</strong>
+<ul>
+<li class="fragment">1: Menos tiempo.</li>
+<li class="fragment">2: Aproximadamente el mismo tiempo.</li>
+<li class="fragment">3: Más tiempo.</li>
 </ul></li>
+<li class="fragment"><strong>Q2. ¿Considerando su experiencia codificando, qué tan parecido considera este registro a alguno que haya visto en el pasado?</strong>
+<ul>
+<li class="fragment">1: Muy parecido. He visto muchas glosas similares en el pasado.</li>
+<li class="fragment">2: Algo parecido. He visto pocas glosas similares en el pasado.</li>
+<li class="fragment">3: Muy distinto. Nunca había visto una glosa similar en el pasado.</li>
+</ul></li>
+</ul></li>
+<li class="fragment">Podemos compartir los registros seleccionados junto a las preguntas extra en un <a href="https://nomenclatura-dev.ine.cl/">formato familiar</a> para analistas.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="r-stack center" data-fragment-index="2">
+<p><img data-src="imagenes/monitoring/example_excel_nomenclaturas_01.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
+<p><img data-src="imagenes/monitoring/example_excel_nomenclaturas_02.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
+</div>
+</section>
+<section id="arquitectura-de-monitoreo-model-monitoring-revision-2" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
+<ul>
 <li class="fragment">Validación de métricas:
 <ul>
 <li class="fragment">Analizaremos cómo se correlacionan la clasificación y la estimación de complejidad y novedad de analistas con nuestras métricas.</li>

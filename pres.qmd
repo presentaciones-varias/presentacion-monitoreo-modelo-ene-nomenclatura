@@ -243,12 +243,13 @@ format:
 :::
 
 ::: {.incremental .medium-par}
-- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento) aplicando múltiples métricas de drift.**:
+- **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento) aplicando múltiples métricas de drift**:
   - Algunas implementadas por la librería open-source [Evidently](https://docs.evidentlyai.com/metrics/customize_data_drift).
     - a nivel de cada clase (predicción / ground truth) y dataset.
   - Otras implementadas a medida, como proxy para estimar la incerteza y novedad de los registros.
-    - a nivel de cada registro en el dataset.
-- **Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada** que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas para su revisión...
+    - a nivel de cada registro.
+- **Combinando las diferentes métricas obtenidas, calculamos una métrica única**.
+    - nos permite seleccionar un subconjunto de registros para ser enviado a revisión.
 - Las diferentes métricas calculadas se almacenan en **MinIO** como archivos **html, json, parquet**.
 :::
 
@@ -292,9 +293,9 @@ format:
 
 ::: {.small-par}
 
-| Report                      | Método para evaluar drift | Rango | Threshold | 
+| Report                      | Métrica para evaluar drift | Rango | Threshold | 
 |:-|:-|:-|:-|
-| Text Drift                  | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |  [0, +inf] <br> ?? | drift ≥ 0.1 <br> drift < 0.05
+| Text Drift                  | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |  [0, +inf] <br> [0, 1] | drift ≥ 0.1 <br> drift < 0.05
 | Embedding Drift             | - **Clasificador binario** para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de **ROC AUC como *drift_score***. | [0, 1] | drift > 0.55
 | Prediction Drift            | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1
 | Prediction Drift vs Truth   | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1 
@@ -309,12 +310,12 @@ format:
 ## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **Cómo calculamos una única métrica que combine las diversas métricas usadas?**
-  - Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro / clase, dataset) y luego para obtener una métrica final de revisión.
+- **Cómo calculamos una única métrica a partir de las múltiples métricas aplicadas?**
+  - Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro, clase, dataset) y luego para obtener una métrica final de revisión.
 - **Record drift score:**
   - Suma ponderada de métricas a nivel de registro: <br> uncertainty_score_norm, novelty_score_norm.
 - **Class drift score:**
-  - Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidaades de las clases predichas.
+  - Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidades de las clases predichas.
 - **Revision score:**
   - Suma ponderada de **record_drift_score** y **class_drift_score**.
   - Nos permite seleccionar qué registros del periodo analizado (coyuntura) es importante revisar.
@@ -345,15 +346,49 @@ format:
 ## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
-- **Cómo planeamos estimar la validez de las métricas que calculamos?**
-  - Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyunturas) para ser revisado por analistas expertos.
-  - Criterios utilizados en la selección:
-    - Contiene registros observados en los valores más altos y más bajos del **revision_score**, ordenados aleatoriamente.
-    - Distribución de clases (predichas) es la misma que en el dataset de producción analizado del periodo analizado.
+- **Cómo validamos las métricas que calculamos?**
+  - Seleccionamos un subconjunto de registros para cada periodo de interés (ej: coyunturas) para ser revisado por analistas expertos.
+  - Criterios utilizados en cada selección:
+    - Contiene registros observados en los valores más altos y más bajos del **revision_score** en el periodo, ordenados aleatoriamente.
+    - Su distribución de clases (predichas) es la misma que en el dataset de producción del periodo.
+    - Pensamos en ~100 registros por coyuntura.
+:::
+
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
+
+::: {.incremental .medium-par}
+- **Cómo validamos las métricas que calculamos?**
   - Colaboración de analistas:
-    - Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
+    - Dos analistas clasificarían el mismo subconjunto de registros seleccionados.
       - Permite contar con una clasificación independiente.
-    - Los analistas además responderán un par de preguntas que nos permitirán evaluar la **complejidad** y **novedad** de los registros seleccionados, a partir de su conocimiento experto.
+    - Los analistas además responderían un par de preguntas que nos permitirán evaluar la **complejidad** y **novedad** de los registros, a partir de su conocimiento experto.
+      - **Q1. En relación al tiempo que se tarda usualmente en codificar un registro, este registro le tomó:**
+        - 1: Menos tiempo.
+        - 2: Aproximadamente el mismo tiempo.
+        - 3: Más tiempo.
+      - **Q2. ¿Considerando su experiencia codificando, qué tan parecido considera este registro a alguno que haya visto en el pasado?**
+        - 1: Muy parecido. He visto muchas glosas similares en el pasado.
+        - 2: Algo parecido. He visto pocas glosas similares en el pasado.
+        - 3: Muy distinto. Nunca había visto una glosa similar en el pasado.
+    - Podemos compartir los registros seleccionados junto a las preguntas extra en un [formato familiar](https://nomenclatura-dev.ine.cl/) para analistas.
+:::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/example_excel_nomenclaturas_01.png){.fragment .fade-in-then-out width="100%"}
+
+![](imagenes/monitoring/example_excel_nomenclaturas_02.png){.fragment .fade-in-then-out width="100%"}
+
+:::
+
+
+
+## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
+
+::: {.incremental .medium-par}
+- **Cómo validamos las métricas que calculamos?**
   - Validación de métricas:
     - Analizaremos cómo se correlacionan la clasificación y la estimación de complejidad y novedad de analistas con nuestras métricas.
     - Evaluaremos evolución en la performance del modelo en base a las clasificaciones de analistas...
