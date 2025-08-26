@@ -342,20 +342,6 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
-
-::: {.small-par}
-
-| Metric | W | Metric | W | Metric
-|:-|:-|:-|:-|:-|
-| uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm | 0.2 <br> 0.4 <br> 0.4 | <br> **priority_score** | <br> 0.5 
-| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br> 0.5 | <br><br> **revision_score**
-: {tbl-colwidths="[60,10,10,10,10]"}
-
-:::
-
-
-
 ## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
