@@ -505,7 +505,7 @@
 <ul>
 <li class="fragment">a nivel de cada clase (predicción / ground truth) y dataset.</li>
 </ul></li>
-<li class="fragment">Otras implementadas a medida, como proxy para estimar novedad, incerteza y diversidad de los registros.
+<li class="fragment">Otras implementadas a medida, como proxy para estimar la incerteza y novedad de los registros.
 <ul>
 <li class="fragment">a nivel de cada registro en el dataset.</li>
 </ul></li>
@@ -528,7 +528,7 @@
 | Report Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
 | Report Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
 | Report Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase + dataset |
-| Report Drift Priority | priority score basado en **novedad, incerteza y diversidad**. | registro |
+| Report Drift Priority | priority score basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
 ::: -->
@@ -573,8 +573,8 @@
 <td style="text-align: left;">clase, dataset</td>
 </tr>
 <tr>
-<td style="text-align: left;">Drift Priority</td>
-<td style="text-align: left;">priority score basado en <strong>novedad, incerteza y diversidad</strong>.</td>
+<td style="text-align: left;">Record Drift</td>
+<td style="text-align: left;">record score basado en <strong>incerteza y novedad de las glosas</strong>.</td>
 <td style="text-align: left;">registro</td>
 </tr>
 </tbody>
@@ -631,9 +631,9 @@
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
 <tr>
-<td style="text-align: left;">Drift Priority</td>
-<td style="text-align: left;">- uncertainty_score_norm <br> - novelty_score_norm <br> - diversity_score_norm</td>
-<td style="text-align: left;">[0, 1] <br> [0, 1] <br> [0, 1]</td>
+<td style="text-align: left;">Record Drift</td>
+<td style="text-align: left;">- uncertainty_score_norm <br> - novelty_score_norm</td>
+<td style="text-align: left;">[0, 1] <br> [0, 1]</td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody>
@@ -648,17 +648,17 @@
 <ul>
 <li class="fragment">Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro / clase, dataset) y luego para obtener una métrica final de revisión.</li>
 </ul></li>
-<li class="fragment"><strong>Priority score:</strong>
+<li class="fragment"><strong>Record drift score:</strong>
 <ul>
-<li class="fragment">Suma ponderada de métricas a nivel de registro: <br> uncertainty_score_norm, novelty_score_norm, diversity_score_norm.</li>
+<li class="fragment">Suma ponderada de métricas a nivel de registro: <br> uncertainty_score_norm, novelty_score_norm.</li>
 </ul></li>
-<li class="fragment"><strong>Drift score:</strong>
+<li class="fragment"><strong>Class drift score:</strong>
 <ul>
 <li class="fragment">Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidaades de las clases predichas.</li>
 </ul></li>
 <li class="fragment"><strong>Revision score:</strong>
 <ul>
-<li class="fragment">Suma ponderada de <strong>priority_score</strong> y <strong>drift_score</strong>.</li>
+<li class="fragment">Suma ponderada de <strong>record_drift_score</strong> y <strong>class_drift_score</strong>.</li>
 <li class="fragment">Nos permite seleccionar qué registros del periodo analizado (coyuntura) es importante revisar.</li>
 </ul></li>
 </ul>
@@ -672,35 +672,35 @@
 <section id="arquitectura-de-monitoreo-model-monitoring-metrics-4" class="slide level2">
 <h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
 <div class="small-par">
-<table class="caption-top" style="width:100%;">
+<table class="caption-top">
 <colgroup>
-<col style="width: 60%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
+<col style="width: 52%">
+<col style="width: 8%">
+<col style="width: 16%">
+<col style="width: 8%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr>
 <th style="text-align: left;">Metric</th>
-<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">W</th>
 <th style="text-align: left;">Metric</th>
-<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">W</th>
 <th style="text-align: left;">Metric</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm</td>
-<td style="text-align: left;">0.2 <br> 0.4 <br> 0.4</td>
-<td style="text-align: left;"><br><br> <strong>priority_score</strong></td>
-<td style="text-align: left;"><br><br> 0.5</td>
+<td style="text-align: left;">uncertainty_score_norm <br> novelty_score_norm</td>
+<td style="text-align: left;">0.5 <br> 0.5</td>
+<td style="text-align: left;"><br> <strong>record_drift_score</strong></td>
+<td style="text-align: left;"><br> 0.5</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr>
 <td style="text-align: left;">delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm</td>
 <td style="text-align: left;">0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04</td>
-<td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>drift_score</strong></td>
+<td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>class_drift_score</strong></td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5</td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>revision_score</strong></td>
 </tr>
@@ -722,9 +722,9 @@
 <thead>
 <tr>
 <th style="text-align: left;">Metric</th>
-<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">W</th>
 <th style="text-align: left;">Metric</th>
-<th style="text-align: left;">Weight</th>
+<th style="text-align: left;">W</th>
 <th style="text-align: left;">Metric</th>
 </tr>
 </thead>
@@ -953,35 +953,31 @@
 <p><img data-src="imagenes/monitoring/jensen-shannon_distance_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
-<section id="apéndice-metrics-4" class="slide level2 scrollable">
+<section id="apéndice-metrics-4" class="slide level2">
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>5) Priority Analysis:</strong>
+<li class="fragment"><strong>5) Record Drift:</strong>
 <ul>
-<li class="fragment"><strong>Novelty score:</strong> Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia. <span class="math display">\[
-\small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
-\]</span></li>
 <li class="fragment"><strong>Uncertainty score:</strong> Es una medida de la baja confianza de los registros del dataset de producción, estimada en base a las probabilidades de predicción del modelo. <span class="math display">\[
 \small uncertainty\_score = 1 - prediction\_probability
 \]</span></li>
-<li class="fragment"><strong>Diversity score:</strong> Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano:
-<ol type="1">
-<li class="fragment">Aplicar K-Means clustering a los embeddings de los registros de producción.</li>
-<li class="fragment">Para cada registro, calcular distancia euclidiana a su centroide.</li>
-</ol></li>
-<li class="fragment"><strong>Priority score:</strong>
+<li class="fragment"><strong>Novelty score:</strong> Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia. <span class="math display">\[
+\small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
+\]</span> <!-- - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
+  1. Aplicar K-Means clustering a los embeddings de los registros de producción.
+  2. Para cada registro, calcular distancia euclidiana a su centroide. --></li>
+<li class="fragment"><strong>Record drift score:</strong>
 <ul>
 <li class="fragment">Se normalizan las tres métricas anteriores usando la fórmula: <br> <span class="math display">\[
 \small
-metric = \frac{metric - min(metric)}{max(metric) - min(metric)}
+metric\_norm = \frac{metric - min(metric)}{max(metric) - min(metric)}
 \]</span></li>
 <li class="fragment">Luego usamos las métricas normalizadas para calcular: <span class="math display">\[
-\small priority\_score = w_1 \times uncertainty\_score\_norm \\
-\small \hspace{2.6cm} + w_2 \times novelty\_score\_norm \\
-\small \hspace{3.1cm} + w_3 \times diversity\_score\_norm
+\small record\_drift_\_score = w_1 \times uncertainty\_score\_norm \\
+\small \hspace{4.cm} + w_2 \times novelty\_score\_norm
 \]</span></li>
-<li class="fragment">donde usamos por defecto los pesos: <span class="math display">\[ \small w_1=0.2, w_2=0.4, w_3=0.4 \]</span></li>
+<li class="fragment">donde usamos por defecto los pesos: <span class="math display">\[ \small w_1=0.5, w_2=0.5 \]</span></li>
 </ul></li>
 </ul></li>
 </ul>

@@ -246,7 +246,7 @@ format:
 - **Comparamos los dataset de producción (coyuntura) y de referencia (entrenamiento) aplicando múltiples métricas de drift.**:
   - Algunas implementadas por la librería open-source [Evidently](https://docs.evidentlyai.com/metrics/customize_data_drift).
     - a nivel de cada clase (predicción / ground truth) y dataset.
-  - Otras implementadas a medida, como proxy para estimar novedad, incerteza y diversidad de los registros.
+  - Otras implementadas a medida, como proxy para estimar la incerteza y novedad de los registros.
     - a nivel de cada registro en el dataset.
 - **Ponderando las diferentes métricas obtenidas, calculamos una métrica combinada** que nos permite seleccionar un subconjunto de registros para ser enviado a los analistas para su revisión...
 - Las diferentes métricas calculadas se almacenan en **MinIO** como archivos **html, json, parquet**.
@@ -267,7 +267,7 @@ format:
 | Report Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
 | Report Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
 | Report Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase + dataset |
-| Report Drift Priority | priority score basado en **novedad, incerteza y diversidad**. | registro |
+| Report Drift Priority | priority score basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
 ::: -->
@@ -281,7 +281,7 @@ format:
 | Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
 | Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
 | Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase, dataset |
-| Drift Priority | priority score basado en **novedad, incerteza y diversidad**. | registro |
+| Record Drift | record score basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
 :::
@@ -299,7 +299,7 @@ format:
 | Prediction Drift            | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1
 | Prediction Drift vs Truth   | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1 
 | Prediction Class Prob Drift | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |   [0, +inf] <br> [0, 1] | drift ≥ 0.1 <br> drift < 0.05
-| Drift Priority | - uncertainty_score_norm <br> - novelty_score_norm <br> - diversity_score_norm | [0, 1] <br> [0, 1] <br> [0, 1] | 
+| Record Drift | - uncertainty_score_norm <br> - novelty_score_norm | [0, 1] <br> [0, 1] | 
 : {tbl-colwidths="[25,50,10,15]"}
 
 :::
@@ -311,12 +311,12 @@ format:
 ::: {.incremental .medium-par}
 - **Cómo calculamos una única métrica que combine las diversas métricas usadas?**
   - Usamos sumas ponderadas para combinar las métricas obtenidas a distintos niveles (registro / clase, dataset) y luego para obtener una métrica final de revisión.
-- **Priority score:**
-  - Suma ponderada de métricas a nivel de registro: <br> uncertainty_score_norm, novelty_score_norm, diversity_score_norm.
-- **Drift score:**
+- **Record drift score:**
+  - Suma ponderada de métricas a nivel de registro: <br> uncertainty_score_norm, novelty_score_norm.
+- **Class drift score:**
   - Suma ponderada de métricas a nivel de clase y dataset normalizadas (entre 0 y 1): <br> drift en descriptores de texto, embeddings, clases predichas, clases predichas vs verdaderas, probabilidaades de las clases predichas.
 - **Revision score:**
-  - Suma ponderada de **priority_score** y **drift_score**.
+  - Suma ponderada de **record_drift_score** y **class_drift_score**.
   - Nos permite seleccionar qué registros del periodo analizado (coyuntura) es importante revisar.
 :::
 
@@ -332,11 +332,11 @@ format:
 
 ::: {.small-par}
 
-| Metric | Weight | Metric | Weight | Metric
+| Metric | W | Metric | W | Metric
 |:-|:-|:-|:-|:-|
-| uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm | 0.2 <br> 0.4 <br> 0.4 | <br><br> **priority_score** | <br><br> 0.5 
-| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **revision_score**
-: {tbl-colwidths="[60,10,10,10,10]"}
+| uncertainty_score_norm <br> novelty_score_norm | 0.5 <br> 0.5 | <br> **record_drift_score** | <br> 0.5 
+| delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **class_drift_score** | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 0.5 | <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> **revision_score**
+: {tbl-colwidths="[52,8,16,8,16]"}
 
 :::
 
@@ -346,7 +346,7 @@ format:
 
 ::: {.small-par}
 
-| Metric | Weight | Metric | Weight | Metric
+| Metric | W | Metric | W | Metric
 |:-|:-|:-|:-|:-|
 | uncertainty_score_norm <br> novelty_score_norm <br> diversity_score_norm | 0.2 <br> 0.4 <br> 0.4 | <br> **priority_score** | <br> 0.5 
 | delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm | 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 | <br><br><br><br><br><br><br> **drift_score** | <br><br><br><br><br><br><br> 0.5 | <br><br> **revision_score**
@@ -584,31 +584,30 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **5) Priority Analysis:** 
-  - **Novelty score:** Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
-  $$
-  \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
-  $$
+- **5) Record Drift:** 
   - **Uncertainty score:** Es una medida de la baja confianza de los registros del dataset de producción, estimada en base a las probabilidades de predicción del modelo.
   $$
   \small uncertainty\_score = 1 - prediction\_probability
   $$
-  - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
+  - **Novelty score:** Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
+  $$
+  \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
+  $$
+  <!-- - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
     1. Aplicar K-Means clustering a los embeddings de los registros de producción.
-    2. Para cada registro, calcular distancia euclidiana a su centroide.
-  - **Priority score:**
+    2. Para cada registro, calcular distancia euclidiana a su centroide. -->
+  - **Record drift score:**
     - Se normalizan las tres métricas anteriores usando la fórmula: <br> 
     $$
     \small
-    metric = \frac{metric - min(metric)}{max(metric) - min(metric)}
+    metric\_norm = \frac{metric - min(metric)}{max(metric) - min(metric)}
     $$
     - Luego usamos las métricas normalizadas para calcular:
     $$
-    \small priority\_score = w_1 \times uncertainty\_score\_norm \\ 
-    \small \hspace{2.6cm} + w_2 \times novelty\_score\_norm \\
-    \small \hspace{3.1cm} + w_3 \times diversity\_score\_norm
+    \small record\_drift_\_score = w_1 \times uncertainty\_score\_norm \\ 
+    \small \hspace{4.cm} + w_2 \times novelty\_score\_norm
     $$
     - donde usamos por defecto los pesos: 
-    $$ \small w_1=0.2, w_2=0.4, w_3=0.4 $$
+    $$ \small w_1=0.5, w_2=0.5 $$
 :::
 
