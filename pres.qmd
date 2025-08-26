@@ -391,8 +391,8 @@ format:
 - **Cómo validamos las métricas que calculamos?**
   - Validación de métricas:
     - Analizaremos cómo se correlacionan la clasificación y la estimación de complejidad y novedad de analistas con nuestras métricas.
-    - Evaluaremos evolución en la performance del modelo en base a las clasificaciones de analistas...
-    - Estimaremos la frecuencia con que el modelo necesita ser re-entrenado...
+    - Evaluaremos cómo evoluciona en el tiempo la performance de los modelos en base a la clasificación realizada por analistas.
+      - A partir de dicha evaluación, podremos estimar la frecuencia con que sería conveniente re-entrenar los modelos.
 :::
 
 
