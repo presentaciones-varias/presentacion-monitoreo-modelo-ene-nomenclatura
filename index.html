@@ -747,31 +747,31 @@
 </table>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-revisión" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revisión</span></h2>
+<section id="arquitectura-de-monitoreo-model-monitoring-revision" class="slide level2">
+<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment"><strong>Cómo planeamos estimar la validez de las métricas que calculamos?</strong>
 <ul>
-<li class="fragment">Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyuntura) para ser revisado por analistas expertos…</li>
+<li class="fragment">Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyunturas) para ser revisado por analistas expertos.</li>
 <li class="fragment">Criterios utilizados en la selección:
 <ul>
-<li class="fragment">Debe contener registros observados en los valores más altos y más bajos del <strong>revision_score</strong>, ordenados aleatoriamente.</li>
-<li class="fragment">Distribución de clases…como en dataset de producción analizado…</li>
+<li class="fragment">Contiene registros observados en los valores más altos y más bajos del <strong>revision_score</strong>, ordenados aleatoriamente.</li>
+<li class="fragment">Distribución de clases (predichas) es la misma que en el dataset de producción analizado del periodo analizado.</li>
 </ul></li>
 <li class="fragment">Colaboración de analistas:
 <ul>
 <li class="fragment">Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
 <ul>
-<li class="fragment">Esto permite contar con una clasificación independiente…</li>
+<li class="fragment">Permite contar con una clasificación independiente.</li>
 </ul></li>
-<li class="fragment">Los analistas además responderán un par de preguntas que nos permitirán evaluar la <strong>complejidad</strong> y <strong>novedad</strong> de los registros seleccionados, a partir de conocimiento experto.</li>
+<li class="fragment">Los analistas además responderán un par de preguntas que nos permitirán evaluar la <strong>complejidad</strong> y <strong>novedad</strong> de los registros seleccionados, a partir de su conocimiento experto.</li>
 </ul></li>
-<li class="fragment">Siguientes pasos:
+<li class="fragment">Validación de métricas:
 <ul>
-<li class="fragment">Tras la revisión, analizaremos … entre clasificación, complejidad y novedad asignadas por analistas y nuestras métricas…</li>
-<li class="fragment">Si tras el análisis, concluimos que nuestras métricas tienen validez, podemos evaluar el cambio en la performance del modelo incluyendo las mismas muestras seleccionadas en el entrenamiento para decidir si es conveniente realizar un re-entrenamiento del mismo…<br>
-</li>
+<li class="fragment">Analizaremos cómo se correlacionan la clasificación y la estimación de complejidad y novedad de analistas con nuestras métricas.</li>
+<li class="fragment">Evaluaremos evolución en la performance del modelo en base a las clasificaciones de analistas…</li>
+<li class="fragment">Estimaremos la frecuencia con que el modelo necesita ser re-entrenado…</li>
 </ul></li>
 </ul></li>
 </ul>

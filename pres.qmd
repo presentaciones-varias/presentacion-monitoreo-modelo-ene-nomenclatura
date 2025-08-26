@@ -356,21 +356,22 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Revisión]{.big-par}
+## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
 - **Cómo planeamos estimar la validez de las métricas que calculamos?**
-  - Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyuntura) para ser revisado por analistas expertos...
+  - Seleccionamos un subconjunto de registros para un periodo determinado (ej: coyunturas) para ser revisado por analistas expertos.
   - Criterios utilizados en la selección:
-    - Debe contener registros observados en los valores más altos y más bajos del **revision_score**, ordenados aleatoriamente.
-    - Distribución de clases...como en dataset de producción analizado...
+    - Contiene registros observados en los valores más altos y más bajos del **revision_score**, ordenados aleatoriamente.
+    - Distribución de clases (predichas) es la misma que en el dataset de producción analizado del periodo analizado.
   - Colaboración de analistas:
     - Dos analistas clasificarán el mismo subconjunto de registros seleccionados.
-      - Esto permite contar con una clasificación independiente...
-    - Los analistas además responderán un par de preguntas que nos permitirán evaluar la **complejidad** y **novedad** de los registros seleccionados, a partir de conocimiento experto.
-  - Siguientes pasos:
-    - Tras la revisión, analizaremos ... entre clasificación, complejidad y novedad asignadas por analistas y nuestras métricas... 
-    - Si tras el análisis, concluimos que nuestras métricas tienen validez, podemos evaluar el cambio en la performance del modelo incluyendo las mismas muestras seleccionadas en el entrenamiento para decidir si es conveniente realizar un re-entrenamiento del mismo...  
+      - Permite contar con una clasificación independiente.
+    - Los analistas además responderán un par de preguntas que nos permitirán evaluar la **complejidad** y **novedad** de los registros seleccionados, a partir de su conocimiento experto.
+  - Validación de métricas:
+    - Analizaremos cómo se correlacionan la clasificación y la estimación de complejidad y novedad de analistas con nuestras métricas.
+    - Evaluaremos evolución en la performance del modelo en base a las clasificaciones de analistas...
+    - Estimaremos la frecuencia con que el modelo necesita ser re-entrenado...
 :::
 
 
