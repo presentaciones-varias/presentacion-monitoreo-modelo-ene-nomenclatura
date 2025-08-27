@@ -120,9 +120,37 @@ format:
 
 ::: {.incremental .medium-par}
 - **Deriva de covariables** (*Covariate drift*): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.
-  - Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (etiqueta) se mantiene.
+  - Cambia la forma en que se describen ocupaciones/actividades (lenguaje en las glosas), pero el significado final (etiqueta) se mantiene.
+  - Ej: aparecen nuevas palabras como programar, diseñar, gestionar en línea, pero esas descripciones siguen correspondiendo a la misma categoría de ocupación (ej: "Ingeniero de software").
+:::
+
+
+
+## [Data drift | Principales tipos]{.big-par}
+
+::: {fragment-index=0 .center}
+
+![](imagenes/monitoring/data_distribution_shifts_types.png){.fragment width="60%"}
+
+:::
+
+::: {.incremental .medium-par}
 - **Deriva de etiquetas** (*Label drift*): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.
   - Cambian las frecuencias relativas de clases (qué ocupaciones/actividades son más comunes), aunque la correspondencia entrada → salida se mantiene.
+  - Ej: aunque las descripciones de los registros se mantengan estables, cada vez aparecen más casos etiquetados como ocupaciones de "Tecnología" y menos de "Administración".
+:::
+
+
+
+## [Data drift | Principales tipos]{.big-par}
+
+::: {fragment-index=0 .center}
+
+![](imagenes/monitoring/data_distribution_shifts_types.png){.fragment width="60%"}
+
+:::
+
+::: {.incremental .medium-par}
 - **Deriva de concepto** (*Concept drift*): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
   - cambia la relación entrada → salida, porque los términos empiezan a usarse para otros conceptos.
 :::

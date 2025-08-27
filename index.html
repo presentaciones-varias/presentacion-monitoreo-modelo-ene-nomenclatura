@@ -420,12 +420,34 @@
 <ul>
 <li class="fragment"><strong>Deriva de covariables</strong> (<em>Covariate drift</em>): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.
 <ul>
-<li class="fragment">Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (etiqueta) se mantiene.</li>
+<li class="fragment">Cambia la forma en que se describen ocupaciones/actividades (lenguaje en las glosas), pero el significado final (etiqueta) se mantiene.</li>
+<li class="fragment">Ej: aparecen nuevas palabras como programar, diseñar, gestionar en línea, pero esas descripciones siguen correspondiendo a la misma categoría de ocupación (ej: “Ingeniero de software”).</li>
 </ul></li>
+</ul>
+</div>
+</section>
+<section id="data-drift-principales-tipos-1" class="slide level2">
+<h2><span class="big-par">Data drift | Principales tipos</span></h2>
+<div class="center" data-fragment-index="0">
+<p><img data-src="imagenes/monitoring/data_distribution_shifts_types.png" class="fragment" style="width:60.0%"></p>
+</div>
+<div class="medium-par">
+<ul>
 <li class="fragment"><strong>Deriva de etiquetas</strong> (<em>Label drift</em>): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.
 <ul>
 <li class="fragment">Cambian las frecuencias relativas de clases (qué ocupaciones/actividades son más comunes), aunque la correspondencia entrada → salida se mantiene.</li>
+<li class="fragment">Ej: aunque las descripciones de los registros se mantengan estables, cada vez aparecen más casos etiquetados como ocupaciones de “Tecnología” y menos de “Administración”.</li>
 </ul></li>
+</ul>
+</div>
+</section>
+<section id="data-drift-principales-tipos-2" class="slide level2">
+<h2><span class="big-par">Data drift | Principales tipos</span></h2>
+<div class="center" data-fragment-index="0">
+<p><img data-src="imagenes/monitoring/data_distribution_shifts_types.png" class="fragment" style="width:60.0%"></p>
+</div>
+<div class="medium-par">
+<ul>
 <li class="fragment"><strong>Deriva de concepto</strong> (<em>Concept drift</em>): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
 <ul>
 <li class="fragment">cambia la relación entrada → salida, porque los términos empiezan a usarse para otros conceptos.</li>
