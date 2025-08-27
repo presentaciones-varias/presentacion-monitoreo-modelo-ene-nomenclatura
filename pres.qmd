@@ -59,14 +59,12 @@ format:
 ## [Motivación hacia el Monitoreo I]{.big-par}
 
 ::: {.incremental .medium-par}
-- **La Encuesta Nacional de Empleo (ENE)**, a cargo del INE, es la principal fuente de información del mercado laboral del país. 
-  - Es una encuesta mensual que permite conocer la tasa de desocupación del país, así como indicadores de calidad del empleo, proporcionando información actualizada y confiable para la toma de decisiones públicas y privadas.
-  - Busca caracterizar a todas las personas en edad de trabajar (15 años y más), según su situación en el mercado laboral. 
-  - Además, reporta información detallada sobre la calidad de las ocupaciones que se generan en el mercado laboral chileno. 
+- **La Encuesta Nacional de Empleo (ENE)** genera mes a mes glosas abiertas que deben ser clasificadas y que dan cuenta de las ocupaciones y actividad económica del mercado laboral del país. 
 - En su flujo de procesamiento, analistas de la ENE utilizan **codificación automática** para clasificar la ocupación (CIUO) y la rama de actividad económica (CAENES) de las personas, al nivel de desagregación de 1 y 2 dígitos.
-  - Cuatro **modelos de machine learning** han sido disponibilizados desde Ciencia de Datos para colaborar en esta tarea: 
-    - **Modelo CIUO a 1 y 2 dígitos.**
-    - **Modelo CAENES a 1 y 2 dígitos.**
+- Cuatro **modelos de machine learning** han sido disponibilizados desde Ciencia de Datos para colaborar en esta tarea: 
+  - **Modelo CIUO a 1 y 2 dígitos.**
+  - **Modelo CAENES a 1 y 2 dígitos.**
+- Además de la ENE, otras instituciones públicas también usan estos modelos (MDSF, ChileCompras, DT, FNE).
 :::
 
 
@@ -153,6 +151,7 @@ format:
 ::: {.incremental .medium-par}
 - **Deriva de concepto** (*Concept drift*): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
   - cambia la relación entrada → salida, porque los términos empiezan a usarse para otros conceptos.
+  - Ej: si se decide que una palabra que estaba asociada a la clase X comienza a asociarse a la clase Y.
 :::
 
 
@@ -396,7 +395,7 @@ format:
 ## [Arquitectura | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
-- **Cómo validamos las métricas que calculamos?**
+- **¿Cómo validamos las métricas que calculamos?**
   - Colaboración de analistas:
     - Dos analistas clasificarían el mismo subconjunto de registros seleccionados.
       - Permite contar con una clasificación independiente.
@@ -407,9 +406,9 @@ format:
         - 3: Más tiempo.
       - **Q2. ¿Considerando su experiencia codificando, qué tan parecido considera este registro a alguno que haya visto en el pasado?**
         - 1: Muy parecido. He visto muchas glosas similares en el pasado.
-        - 2: Algo parecido. He visto pocas glosas similares en el pasado.
+        - *2: Algo parecido. He visto pocas glosas similares en el pasado.*
         - 3: Muy distinto. Nunca había visto una glosa similar en el pasado.
-    - Podemos compartir los registros seleccionados junto a las preguntas extra en un [formato familiar](https://nomenclatura-dev.ine.cl/) para analistas.
+    - Podemos compartir los registros seleccionados junto a las preguntas extra en un [formato familiar](https://nomenclatura-dev.ine.cl/) para el equipo de Nomenclaturas.
 :::
 
 ::: {.r-stack fragment-index=2 .center}
