@@ -64,7 +64,7 @@ format:
 - Cuatro **modelos de machine learning** han sido disponibilizados desde Ciencia de Datos para colaborar en esta tarea: 
   - **Modelo CIUO a 1 y 2 dígitos.**
   - **Modelo CAENES a 1 y 2 dígitos.**
-- Además de la ENE, otras instituciones públicas también usan estos modelos (MDSF, ChileCompras, DT, FNE).
+- Además de la ENE, otras instituciones públicas también usan estos modelos (MDSF, ChileCompra, DT, FNE).
 :::
 
 
