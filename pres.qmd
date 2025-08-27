@@ -120,7 +120,7 @@ format:
 
 ::: {.incremental .medium-par}
 - **Deriva de covariables** (*Covariate drift*): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.
-  - Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (la etiqueta) sigue igual.
+  - Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (etiqueta) se mantiene.
 - **Deriva de etiquetas** (*Label drift*): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.
   - Cambian las frecuencias relativas de clases (qué ocupaciones/actividades son más comunes), aunque la correspondencia entrada → salida se mantiene.
 - **Deriva de concepto** (*Concept drift*): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
