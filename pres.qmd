@@ -291,7 +291,7 @@ format:
 | Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
 | Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
 | Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase, dataset |
-| Record Drift | record score basado en **incerteza y novedad de las glosas**. | registro |
+| Record Drift | drift basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
 :::
@@ -305,7 +305,7 @@ format:
 | Report                      | Métrica para evaluar drift | Rango | Threshold | 
 |:-|:-|:-|:-|
 | Text Drift                  | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |  [0, +inf] <br> [0, 1] | drift ≥ 0.1 <br> drift < 0.05
-| Embedding Drift             | - **Clasificador binario** para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de **ROC AUC como *drift_score***. | [0, 1] | drift > 0.55
+| Embedding Drift             | - **Binary classifier** para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de **ROC AUC como *drift_score***. | [0, 1] | drift > 0.55
 | Prediction Drift            | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1
 | Prediction Drift vs Truth   | - **Jensen-Shannon distance**. | [0, 1] | drift ≥ 0.1 
 | Prediction Class Prob Drift | - **Wasserstein distance**: modelos a 1 dígito. <br> - **Kolmogorov–Smirnov (K-S) test**: modelos a 2 dígitos. |   [0, +inf] <br> [0, 1] | drift ≥ 0.1 <br> drift < 0.05
@@ -557,6 +557,8 @@ format:
 
 ::: {.incremental .medium-par}
 - **2) Kolmogorov–Smirnov (K-S) test**: es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
+  - Construye distribuciones de probabilidad acumulada (CDFs).
+  - Evalúa la máxima diferencia absoluta entre ambas CDFs y ese valor se usa como estadístico de prueba.
   - La hipótesis nula es que las dos muestras vienen de la misma distribución y la prueba se aplica para rechazar o aceptar esta hipótesis.
   - Retorna *p_value* en rango [0, 1]. 
     - Si *p_value < 0.05*, usualmente podemos declarar que hay evidencia para rechazar la hipótesis nula y considerar que las dos muestras son diferentes, es decir, que existe drift.
@@ -572,7 +574,7 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **3) Clasificador Binario** usado para distinguir entre los embeddings calculados desde ambos datasets.
+- **3) Binary Classifier** usado para distinguir entre los embeddings calculados desde ambos datasets.
   - Este clasificador retorna valores de **ROC AUC como *drift_score***.
     - *drift_score* en rango [0, 1].
     - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.55*
@@ -587,11 +589,11 @@ format:
 :::
 
 
+
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **4) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**...
-    - Intuición: mide un *promedio* de todos los cambios en las frecuencias relativas de las categorías.
+- **4) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
     - *drift_score* en rango [0, 1]:
       - 0 indica que las dos distribuciones son idénticas.
       - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.1*
@@ -599,13 +601,13 @@ format:
 
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/jensen-shannon_distance_01.png){.fragment width="70%"}
+![](imagenes/monitoring/jensen_shannon_distance_estimation_01.png){.fragment width="100%"}
 
 :::
 
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/jensen-shannon_distance_02.png){.fragment width="70%"}
+![](imagenes/monitoring/jensen_shannon_distance_estimation_02.png){.fragment width="90%"}
 
 :::
 
