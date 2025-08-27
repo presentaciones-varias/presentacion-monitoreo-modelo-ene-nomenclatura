@@ -79,7 +79,7 @@ format:
   - **Cambios en la distribución** (*data drift*) ocurren cuando los datos en producción difieren de los datos de entrenamiento utilizados para construir el modelo.
 - Solución: **monitoreo periódico y re-entrenamiento de los modelos**.
   - En el caso de la ENE, mes a mes analistas nos envían las glosas de ocupación y actividad económica correspondientes a los datos de la coyuntura mensual.
-  - Con esos datos implementamos el monitoreo: **comparando el nuevo dataset mensual (producción) versus el que fue usado para entrenar los modelos (referencia)**, evaluando la existencia de **data drift**. 
+  - Hacemos uso de estas glosas para implementar el monitoreo: **comparando el nuevo dataset mensual (producción) versus el usado para entrenar los modelos (referencia)**, evaluando la existencia de **data drift**. 
 :::
 
 
