@@ -344,8 +344,13 @@
 <ul>
 <li><p>Motivación hacia el Monitoreo</p></li>
 <li><p>Data drift</p></li>
-<li><p>Arquitectura de Monitoreo</p></li>
-<li><p>Trabajo futuro / Discusión</p></li>
+<li><p>Arquitectura implementada</p>
+<ul>
+<li><p>Esquema General</p></li>
+<li><p>Model training</p></li>
+<li><p>Model prediction</p></li>
+<li><p>Model monitoring</p></li>
+</ul></li>
 </ul>
 <!-- - Conclusión -->
 <!-- ::: -->
@@ -377,17 +382,14 @@
 <ul>
 <li class="fragment"><strong>Los modelos de machine learning se degradan con el tiempo</strong>, ya que deben lidiar con varios problemas: casos extremos, bucles de retroalimentación positiva y cambios en la distribución de los datos (<em>data drift</em>).
 <ul>
-<li class="fragment"><strong>Casos extremos</strong> (<em>edge cases</em>): Son muestras válidas pero atípicas que exponen las debilidades de un modelo en producción, llevándolo a hacer predicciones absurdas o catastróficas.
-<ul>
-<li class="fragment">Son inevitables, pero podemos mitigar su impacto identificando valores atípicos (outliers), diseñando estrategias de contingencia (fallback) y realizando reentrenamientos frecuentes que incluyan estos casos.</li>
-</ul></li>
+<li class="fragment"><strong>Casos extremos</strong> (<em>edge cases</em>): Son muestras válidas pero atípicas que exponen las debilidades de un modelo en producción, llevándolo a hacer predicciones absurdas o catastróficas. <!-- - Son inevitables, pero podemos mitigar su impacto identificando valores atípicos (outliers), diseñando estrategias de contingencia (fallback) y realizando reentrenamientos frecuentes que incluyan estos casos. --></li>
 <li class="fragment"><strong>Bucles de retroalimentación positiva</strong> (<em>positive feedback loops</em>): Ocurren cuando las predicciones del modelo influyen en los datos futuros de manera que refuerzan su comportamiento, lo que puede generar resultados sesgados.</li>
 <li class="fragment"><strong>Cambios en la distribución</strong> (<em>data drift</em>) ocurren cuando los datos en producción difieren de los datos de entrenamiento utilizados para construir el modelo.</li>
 </ul></li>
-<li class="fragment">Solución: <strong>monitoreo periódico y actualización de los modelos</strong>.
+<li class="fragment">Solución: <strong>monitoreo periódico y re-entrenamiento de los modelos</strong>.
 <ul>
 <li class="fragment">En el caso de la ENE, mes a mes analistas nos envían las glosas de ocupación y actividad económica correspondientes a los datos de la coyuntura mensual.</li>
-<li class="fragment">Entonces podemos implementar el monitoreo: <strong>comparando el nuevo dataset mensual (de producción) versus el que fue usado originalmente para entrenar los modelos (de referencia)</strong>, evaluando la existencia de <strong>data drift</strong>.</li>
+<li class="fragment">Con esos datos implementamos el monitoreo: <strong>comparando el nuevo dataset mensual (producción) versus el que fue usado para entrenar los modelos (referencia)</strong>, evaluando la existencia de <strong>data drift</strong>.</li>
 </ul></li>
 </ul>
 </div>
@@ -416,22 +418,31 @@
 </div>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>Deriva de covariables</strong> (<em>Covariate drift</em>): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.</li>
-<li class="fragment"><strong>Deriva de etiquetas</strong> (<em>Label drift</em>): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.</li>
-<li class="fragment"><strong>Deriva de concepto</strong> (<em>Concept drift</em>): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.</li>
+<li class="fragment"><strong>Deriva de covariables</strong> (<em>Covariate drift</em>): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.
+<ul>
+<li class="fragment">Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (la etiqueta) sigue igual.</li>
+</ul></li>
+<li class="fragment"><strong>Deriva de etiquetas</strong> (<em>Label drift</em>): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.
+<ul>
+<li class="fragment">Cambian las frecuencias relativas de clases (qué ocupaciones/actividades son más comunes), aunque la correspondencia entrada → salida se mantiene.</li>
+</ul></li>
+<li class="fragment"><strong>Deriva de concepto</strong> (<em>Concept drift</em>): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
+<ul>
+<li class="fragment">cambia la relación entrada → salida, porque los términos empiezan a usarse para otros conceptos.</li>
+</ul></li>
 </ul>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-general" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | General</span></h2>
+<section id="arquitectura-esquema-general" class="slide level2">
+<h2><span class="big-par">Arquitectura | Esquema General</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_01.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_02.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_03.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-training" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model training</span></h2>
+<section id="arquitectura-model-training" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model training</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment">Los modelos disponibilizados fueron entrenados en Pytorch utilizando una arquitectura <strong>RNN: multi-layer gated recurrent unit (GRU)</strong>.</li>
@@ -447,14 +458,14 @@
 <p><img data-src="imagenes/monitoring/trained_models_metrics.png" class="fragment fade-in-then-out" style="width:80.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-prediction" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model prediction</span></h2>
+<section id="arquitectura-model-prediction" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model prediction</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_04.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-prediction-1" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model prediction</span></h2>
+<section id="arquitectura-model-prediction-1" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model prediction</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_model_prediction.png" class="fragment" style="width:90.0%"></p>
 </div>
@@ -465,15 +476,15 @@
 <p><img data-src="imagenes/monitoring/api_clasificador_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring</span></h2>
+<section id="arquitectura-model-monitoring" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_05.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_06.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-data-capture" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Data capture</span></h2>
+<section id="arquitectura-model-monitoring-data-capture" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Data capture</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_01.png" class="fragment" style="width:50.0%"></p>
 </div>
@@ -482,8 +493,8 @@
 <p><img data-src="imagenes/monitoring/db_data_capture_reference_02.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-data-capture-1" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Data capture</span></h2>
+<section id="arquitectura-model-monitoring-data-capture-1" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Data capture</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_02.png" class="fragment" style="width:50.0%"></p>
 </div>
@@ -492,8 +503,8 @@
 <p><img data-src="imagenes/monitoring/db_data_capture_production_02.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<section id="arquitectura-model-monitoring-metrics" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Metrics</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_03.png" class="fragment" style="width:50.0%"></p>
 </div>
@@ -518,8 +529,8 @@
 </ul>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-1" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<section id="arquitectura-model-monitoring-metrics-1" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Metrics</span></h2>
 <!-- ::: {.small-par}
 
 | Test / Report                      | Evaluación | Nivel |
@@ -584,8 +595,8 @@
 </table>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-2" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<section id="arquitectura-model-monitoring-metrics-2" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Metrics</span></h2>
 <div class="small-par">
 <table class="caption-top">
 <colgroup>
@@ -643,8 +654,8 @@
 </table>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-3" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<section id="arquitectura-model-monitoring-metrics-3" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Metrics</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment"><strong>Cómo calculamos una única métrica a partir de las múltiples métricas aplicadas?</strong>
@@ -672,8 +683,8 @@
 
 ::: -->
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-metrics-4" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Metrics</span></h2>
+<section id="arquitectura-model-monitoring-metrics-4" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Metrics</span></h2>
 <div class="small-par">
 <table class="caption-top">
 <colgroup>
@@ -711,8 +722,8 @@
 </table>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-revision" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
+<section id="arquitectura-model-monitoring-revision" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Revision</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
@@ -728,8 +739,8 @@
 </ul>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-revision-1" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
+<section id="arquitectura-model-monitoring-revision-1" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Revision</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
@@ -765,8 +776,8 @@
 <p><img data-src="imagenes/monitoring/example_excel_nomenclaturas_02.png" class="fragment fade-in-then-out" style="width:100.0%"></p>
 </div>
 </section>
-<section id="arquitectura-de-monitoreo-model-monitoring-revision-2" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Model monitoring | Revision</span></h2>
+<section id="arquitectura-model-monitoring-revision-2" class="slide level2">
+<h2><span class="big-par">Arquitectura | Model monitoring | Revision</span></h2>
 <div class="medium-par">
 <ul>
 <li class="fragment"><strong>Cómo validamos las métricas que calculamos?</strong>
@@ -859,8 +870,8 @@
 
 ::: -->
 </section>
-<section id="arquitectura-de-monitoreo-dashboard" class="slide level2">
-<h2><span class="big-par">Arquitectura de Monitoreo | Dashboard</span></h2>
+<section id="arquitectura-dashboard" class="slide level2">
+<h2><span class="big-par">Arquitectura | Dashboard</span></h2>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/monitoring_pipeline_stages_04.png" class="fragment" style="width:50.0%"></p>
 </div>

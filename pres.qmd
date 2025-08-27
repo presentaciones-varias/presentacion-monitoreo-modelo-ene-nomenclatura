@@ -41,9 +41,15 @@ format:
 
 - Data drift
 
-- Arquitectura de Monitoreo
+- Arquitectura implementada
 
-- Trabajo futuro / Discusión
+  - Esquema General
+
+  - Model training 
+
+  - Model prediction
+
+  - Model monitoring
 
 <!-- - Conclusión -->
 <!-- ::: -->
@@ -70,12 +76,12 @@ format:
 ::: {.incremental .medium-par}
 - **Los modelos de machine learning se degradan con el tiempo**, ya que deben lidiar con varios problemas: casos extremos, bucles de retroalimentación positiva y cambios en la distribución de los datos (*data drift*).
   - **Casos extremos** (*edge cases*): Son muestras válidas pero atípicas que exponen las debilidades de un modelo en producción, llevándolo a hacer predicciones absurdas o catastróficas.
-    - Son inevitables, pero podemos mitigar su impacto identificando valores atípicos (outliers), diseñando estrategias de contingencia (fallback) y realizando reentrenamientos frecuentes que incluyan estos casos.
+    <!-- - Son inevitables, pero podemos mitigar su impacto identificando valores atípicos (outliers), diseñando estrategias de contingencia (fallback) y realizando reentrenamientos frecuentes que incluyan estos casos. -->
   - **Bucles de retroalimentación positiva** (*positive feedback loops*): Ocurren cuando las predicciones del modelo influyen en los datos futuros de manera que refuerzan su comportamiento, lo que puede generar resultados sesgados.
   - **Cambios en la distribución** (*data drift*) ocurren cuando los datos en producción difieren de los datos de entrenamiento utilizados para construir el modelo.
-- Solución: **monitoreo periódico y actualización de los modelos**.
+- Solución: **monitoreo periódico y re-entrenamiento de los modelos**.
   - En el caso de la ENE, mes a mes analistas nos envían las glosas de ocupación y actividad económica correspondientes a los datos de la coyuntura mensual.
-  - Entonces podemos implementar el monitoreo: **comparando el nuevo dataset mensual (de producción) versus el que fue usado originalmente para entrenar los modelos (de referencia)**, evaluando la existencia de **data drift**. 
+  - Con esos datos implementamos el monitoreo: **comparando el nuevo dataset mensual (producción) versus el que fue usado para entrenar los modelos (referencia)**, evaluando la existencia de **data drift**. 
 :::
 
 
@@ -114,13 +120,16 @@ format:
 
 ::: {.incremental .medium-par}
 - **Deriva de covariables** (*Covariate drift*): Ocurre cuando la distribución de las variables de entrada cambia, pero la relación entre estas características y la variable objetivo se mantiene igual.
+  - Cambia la forma en que se describen ocupaciones/actividades, pero el significado final (la etiqueta) sigue igual.
 - **Deriva de etiquetas** (*Label drift*): Sucede cuando la distribución de la variable objetivo cambia, mientras que la relación entre las características de entrada y la variable objetivo permanece constante.
+  - Cambian las frecuencias relativas de clases (qué ocupaciones/actividades son más comunes), aunque la correspondencia entrada → salida se mantiene.
 - **Deriva de concepto** (*Concept drift*): Se produce cuando la relación entre las características de entrada y la variable objetivo varía debido a que los supuestos del modelo ya no son válidos.
+  - cambia la relación entrada → salida, porque los términos empiezan a usarse para otros conceptos.
 :::
 
 
 
-## [Arquitectura de Monitoreo | General]{.big-par}
+## [Arquitectura | Esquema General]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -134,7 +143,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model training]{.big-par}
+## [Arquitectura | Model training]{.big-par}
 
 ::: {.incremental .medium-par}
 - Los modelos disponibilizados fueron entrenados en Pytorch utilizando una arquitectura **RNN: multi-layer gated recurrent unit (GRU)**. 
@@ -153,7 +162,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model prediction]{.big-par}
+## [Arquitectura | Model prediction]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -163,7 +172,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model prediction]{.big-par}
+## [Arquitectura | Model prediction]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -185,7 +194,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring]{.big-par}
+## [Arquitectura | Model monitoring]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -197,7 +206,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Data capture]{.big-par}
+## [Arquitectura | Model monitoring | Data capture]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -216,7 +225,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Data capture]{.big-par}
+## [Arquitectura | Model monitoring | Data capture]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -234,7 +243,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura | Model monitoring | Metrics]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
@@ -255,7 +264,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura | Model monitoring | Metrics]{.big-par}
 
 <!-- ::: {.small-par}
 
@@ -289,7 +298,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura | Model monitoring | Metrics]{.big-par}
 
 ::: {.small-par}
 
@@ -307,7 +316,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura | Model monitoring | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
 - **Cómo calculamos una única métrica a partir de las múltiples métricas aplicadas?**
@@ -329,7 +338,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Metrics]{.big-par}
+## [Arquitectura | Model monitoring | Metrics]{.big-par}
 
 ::: {.small-par}
 
@@ -343,7 +352,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
+## [Arquitectura | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
 - **Cómo validamos las métricas que calculamos?**
@@ -356,7 +365,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
+## [Arquitectura | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
 - **Cómo validamos las métricas que calculamos?**
@@ -385,7 +394,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Model monitoring | Revision]{.big-par}
+## [Arquitectura | Model monitoring | Revision]{.big-par}
 
 ::: {.incremental .medium-par}
 - **Cómo validamos las métricas que calculamos?**
@@ -490,7 +499,7 @@ format:
 
 
 
-## [Arquitectura de Monitoreo | Dashboard]{.big-par}
+## [Arquitectura | Dashboard]{.big-par}
 
 ::: {.r-stack fragment-index=2 .center}
 
