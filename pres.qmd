@@ -566,7 +566,9 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **1) Wasserstein distance**: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de *trabajo* requerido para transformar una distribución en otra.
+- **1) Wasserstein distance**: 
+- La usamos en **Text Drift** y **Prediction Class Prob Drift**, para modelos a 1 dígitos.
+- Mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de *trabajo* requerido para transformar una distribución en otra.
     - *Trabajo* se refiere al costo de mover una unidad de masa de probabilidad.
   - *drift_score* en rango [0, +inf]:
     - 0 indica que las dos distribuciones son idénticas.
@@ -594,7 +596,9 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **2) Kolmogorov–Smirnov (K-S) test**: es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
+- **2) Kolmogorov–Smirnov (K-S) test**: 
+- La usamos en **Text Drift** y **Prediction Class Prob Drift**, para modelos a 2 dígitos.
+- Es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
   - Construye distribuciones de probabilidad acumulada (CDFs).
   - Evalúa la máxima diferencia absoluta entre ambas CDFs y ese valor se usa como estadístico de prueba.
   - La hipótesis nula es que las dos muestras vienen de la misma distribución y la prueba se aplica para rechazar o aceptar esta hipótesis.
@@ -623,7 +627,9 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **3) Jensen-Shannon distance**: basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
+- **3) Jensen-Shannon distance**:
+- La usamos en **Prediction Drift** y **Prediction Drift vs Truth**, para modelos a 1 y 2 dígitos.
+- Basada en el método **Kullback-Leibler Divergence**, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la **Jensen-Shannon divergence**.
     - *drift_score* en rango [0, 1]:
       - 0 indica que las dos distribuciones son idénticas.
       - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.1*
@@ -650,10 +656,11 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
-- **4) Binary Classifier** usado para distinguir entre los embeddings calculados desde ambos datasets.
-  - Este clasificador retorna valores de **ROC AUC como *drift_score***.
-    - *drift_score* en rango [0, 1].
-    - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.55*
+- **4) Binary Classifier** 
+- Lo usamos en **Embedding Drift** (modelos a 1 y 2 dígitos).
+- Este clasificador retorna valores de **ROC AUC como *drift_score***.
+  - *drift_score* en rango [0, 1].
+  - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.55*
 :::
 
 ::: {.r-stack fragment-index=2 .center}

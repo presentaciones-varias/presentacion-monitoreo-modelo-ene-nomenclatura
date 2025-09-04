@@ -913,7 +913,9 @@
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>1) Wasserstein distance</strong>: mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de <em>trabajo</em> requerido para transformar una distribución en otra.
+<li class="fragment"><strong>1) Wasserstein distance</strong>:</li>
+<li class="fragment">La usamos en <strong>Text Drift</strong> y <strong>Prediction Class Prob Drift</strong>, para modelos a 1 dígitos.</li>
+<li class="fragment">Mide la distancia entre dos distribuciones de probabilidad, calculando la cantidad mínima de <em>trabajo</em> requerido para transformar una distribución en otra.
 <ul>
 <li class="fragment"><em>Trabajo</em> se refiere al costo de mover una unidad de masa de probabilidad.</li>
 <li class="fragment"><em>drift_score</em> en rango [0, +inf]:
@@ -950,7 +952,9 @@
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>2) Kolmogorov–Smirnov (K-S) test</strong>: es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
+<li class="fragment"><strong>2) Kolmogorov–Smirnov (K-S) test</strong>:</li>
+<li class="fragment">La usamos en <strong>Text Drift</strong> y <strong>Prediction Class Prob Drift</strong>, para modelos a 2 dígitos.</li>
+<li class="fragment">Es una prueba estadística no paramétrica: no asume una distribución específica de los datos (ejemplo: normal u otra).
 <ul>
 <li class="fragment">Construye distribuciones de probabilidad acumulada (CDFs).</li>
 <li class="fragment">Evalúa la máxima diferencia absoluta entre ambas CDFs y ese valor se usa como estadístico de prueba.</li>
@@ -988,7 +992,9 @@
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>3) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
+<li class="fragment"><strong>3) Jensen-Shannon distance</strong>:</li>
+<li class="fragment">La usamos en <strong>Prediction Drift</strong> y <strong>Prediction Drift vs Truth</strong>, para modelos a 1 y 2 dígitos.</li>
+<li class="fragment">Basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
 <ul>
 <li class="fragment"><em>drift_score</em> en rango [0, 1]:
 <ul>
@@ -1024,13 +1030,12 @@
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>4) Binary Classifier</strong> usado para distinguir entre los embeddings calculados desde ambos datasets.
-<ul>
+<li class="fragment"><strong>4) Binary Classifier</strong></li>
+<li class="fragment">Lo usamos en <strong>Embedding Drift</strong> (modelos a 1 y 2 dígitos).</li>
 <li class="fragment">Este clasificador retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.
 <ul>
 <li class="fragment"><em>drift_score</em> en rango [0, 1].</li>
 <li class="fragment"><em>&gt; threshold</em> es indicativo de data drift. Por defecto <em>threshold = 0.55</em></li>
-</ul></li>
 </ul></li>
 </ul>
 </div>
