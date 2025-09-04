@@ -952,26 +952,7 @@
 <h2><span class="big-par">Apéndice | Metrics</span></h2>
 <div class="medium-par">
 <ul>
-<li class="fragment"><strong>3) Binary Classifier</strong> usado para distinguir entre los embeddings calculados desde ambos datasets.
-<ul>
-<li class="fragment">Este clasificador retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.
-<ul>
-<li class="fragment"><em>drift_score</em> en rango [0, 1].</li>
-<li class="fragment"><em>&gt; threshold</em> es indicativo de data drift. Por defecto <em>threshold = 0.55</em></li>
-</ul></li>
-</ul></li>
-</ul>
-</div>
-<div class="r-stack center" data-fragment-index="2">
-<p><img data-src="imagenes/monitoring/roc_curve_01.png" class="fragment fade-in-then-out" style="width:70.0%"></p>
-<p><img data-src="imagenes/monitoring/roc_curve_02.png" class="fragment" style="width:70.0%"></p>
-</div>
-</section>
-<section id="apéndice-metrics-3" class="slide level2">
-<h2><span class="big-par">Apéndice | Metrics</span></h2>
-<div class="medium-par">
-<ul>
-<li class="fragment"><strong>4) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
+<li class="fragment"><strong>3) Jensen-Shannon distance</strong>: basada en el método <strong>Kullback-Leibler Divergence</strong>, mide la distancia entre dos distribuciones de probabilidad calculando la raíz cuadrada de la <strong>Jensen-Shannon divergence</strong>.
 <ul>
 <li class="fragment"><em>drift_score</em> en rango [0, 1]:
 <ul>
@@ -986,6 +967,25 @@
 </div>
 <div class="r-stack center" data-fragment-index="2">
 <p><img data-src="imagenes/monitoring/jensen_shannon_distance_estimation_02.png" class="fragment" style="width:90.0%"></p>
+</div>
+</section>
+<section id="apéndice-metrics-3" class="slide level2">
+<h2><span class="big-par">Apéndice | Metrics</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>4) Binary Classifier</strong> usado para distinguir entre los embeddings calculados desde ambos datasets.
+<ul>
+<li class="fragment">Este clasificador retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.
+<ul>
+<li class="fragment"><em>drift_score</em> en rango [0, 1].</li>
+<li class="fragment"><em>&gt; threshold</em> es indicativo de data drift. Por defecto <em>threshold = 0.55</em></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="r-stack center" data-fragment-index="2">
+<p><img data-src="imagenes/monitoring/roc_curve_01.png" class="fragment fade-in-then-out" style="width:70.0%"></p>
+<p><img data-src="imagenes/monitoring/roc_curve_02.png" class="fragment" style="width:70.0%"></p>
 </div>
 </section>
 <section id="apéndice-metrics-4" class="slide level2">
