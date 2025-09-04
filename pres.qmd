@@ -612,7 +612,7 @@ format:
 
 ::: {.r-stack fragment-index=2 .center layout-ncol=2}
 
-![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_01.png){.fragment width="60%"}
+![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_01.png){.fragment width="50%"}
 
 ![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_02.png){.fragment width="50%"}
 
