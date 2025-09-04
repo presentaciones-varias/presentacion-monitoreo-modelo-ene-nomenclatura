@@ -610,13 +610,13 @@ format:
 
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/jensen_shannon_distance_estimation_01.png){.fragment width="100%"}
+![](imagenes/monitoring/jensen_shannon_distance_estimation_01.png){.fragment width="70%"}
 
 :::
 
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/jensen_shannon_distance_estimation_02.png){.fragment width="90%"}
+![](imagenes/monitoring/jensen_shannon_distance_estimation_02.png){.fragment width="60%"}
 
 :::
 
