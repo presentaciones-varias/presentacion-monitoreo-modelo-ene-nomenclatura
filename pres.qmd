@@ -670,9 +670,9 @@ format:
 
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/roc_curve_01.png){.fragment .fade-in-then-out width="70%"}
+![](imagenes/monitoring/drift_embeddings_pres_01.png){.fragment .fade-in-then-out width="90%"}
 
-![](imagenes/monitoring/roc_curve_02.png){.fragment width="70%"}
+![](imagenes/monitoring/drift_embeddings_pres_02.png){.fragment width="90%"}
 
 :::
 
