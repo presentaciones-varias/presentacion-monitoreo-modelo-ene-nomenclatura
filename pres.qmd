@@ -606,9 +606,23 @@ format:
     - Si *p_value < 0.05*, usualmente podemos declarar que hay evidencia para rechazar la hipótesis nula y considerar que las dos muestras son diferentes, es decir, que existe drift.
 :::
 
+
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+- **2) Kolmogorov–Smirnov (K-S) test**: estimación.
+:::
+
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/kolmogorov_smirnov_test_01.png){.fragment width="60%"}
+![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_01.png){.fragment width="60%"}
+
+:::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_02.png){.fragment width="60%"}
 
 :::
 
@@ -621,6 +635,14 @@ format:
     - *drift_score* en rango [0, 1]:
       - 0 indica que las dos distribuciones son idénticas.
       - *> threshold* es indicativo de data drift. Por defecto *threshold = 0.1*
+:::
+
+
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+- **3) Jensen-Shannon distance**: estimación.
 :::
 
 ::: {.r-stack fragment-index=2 .center}
