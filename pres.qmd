@@ -581,13 +581,9 @@ format:
 - **1) Wasserstein distance**: estimación.
 :::
 
-::: {.r-stack fragment-index=2 .center}
+::: {.r-stack fragment-index=2 .center layout-ncol=2}
 
-![](imagenes/monitoring/wasserstein_distance_estimation_01.png){.fragment width="70%"}
-
-:::
-
-::: {.r-stack fragment-index=2 .center}
+![](imagenes/monitoring/wasserstein_distance_estimation_01.png){.fragment width="60%"}
 
 ![](imagenes/monitoring/wasserstein_distance_estimation_02.png){.fragment width="60%"}
 
@@ -614,15 +610,11 @@ format:
 - **2) Kolmogorov–Smirnov (K-S) test**: estimación.
 :::
 
-::: {.r-stack fragment-index=2 .center}
+::: {.r-stack fragment-index=2 .center layout-ncol=2}
 
 ![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_01.png){.fragment width="60%"}
 
-:::
-
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_02.png){.fragment width="60%"}
+![](imagenes/monitoring/kolmogorov_smirnov_test_estimation_02.png){.fragment width="50%"}
 
 :::
 
@@ -645,15 +637,11 @@ format:
 - **3) Jensen-Shannon distance**: estimación.
 :::
 
-::: {.r-stack fragment-index=2 .center}
+::: {.r-stack fragment-index=2 .center layout-ncol=2}
 
 ![](imagenes/monitoring/jensen_shannon_distance_estimation_01.png){.fragment width="70%"}
 
-:::
-
-::: {.r-stack fragment-index=2 .center}
-
-![](imagenes/monitoring/jensen_shannon_distance_estimation_02.png){.fragment width="60%"}
+![](imagenes/monitoring/jensen_shannon_distance_estimation_02.png){.fragment width="70%"}
 
 :::
 
