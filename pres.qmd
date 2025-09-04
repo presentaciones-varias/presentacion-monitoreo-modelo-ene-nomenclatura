@@ -573,11 +573,26 @@ format:
     - *> threshold* es indicativo de drift. Por defecto *threshold = 0.1*
 :::
 
+
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+- **1) Wasserstein distance**: estimación.
+:::
+
 ::: {.r-stack fragment-index=2 .center}
 
-![](imagenes/monitoring/wasserstein_distance_01.png){.fragment width="80%"}
+![](imagenes/monitoring/wasserstein_distance_estimation_01.png){.fragment width="70%"}
 
 :::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/wasserstein_distance_estimation_02.png){.fragment width="60%"}
+
+:::
+
 
 
 ## [Apéndice | Metrics]{.big-par}
