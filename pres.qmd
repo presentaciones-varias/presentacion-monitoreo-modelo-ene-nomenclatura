@@ -315,9 +315,9 @@ format:
 |:-----------------------------------|:------------|:------------|
 | Text Drift                  | drift sobre los descriptores **Text Length** y **Word Count** aplicados a las columnas **oficio, tareas y actividad** (sólo CAENES). <br> - **Text Length**: largo del texto en caracteres. <br>  - **Word Count**: número de palabras en el texto. | clase, dataset |
 | Embedding Drift             | drift en los **embeddings obtenidos para el dataset de producción y referencia**, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo. |  clase, dataset |
-| Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
-| Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
-| Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase, dataset |
+| Prediction Drift            | drift en las **clases predichas por el modelo**. | dataset |
+| Prediction Drift vs Truth   | drift en las **clases predichas por el modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
+| Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por el modelo**. |  clase, dataset |
 | Record Drift | drift basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
