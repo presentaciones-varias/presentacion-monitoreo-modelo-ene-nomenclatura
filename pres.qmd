@@ -676,6 +676,20 @@ format:
 ## [Apéndice | Metrics]{.big-par}
 
 ::: {.incremental .medium-par}
+- **4) Binary Classifier**: estimación.
+:::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/roc_curve_estimation_pres.png){.fragment .fade-in-then-out width="80%"}
+
+:::
+
+
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
 - **5) Record Drift:** 
   - **Uncertainty score:** Es una medida de la baja confianza de los registros del dataset de producción, estimada en base a las probabilidades de predicción del modelo.
   $$
