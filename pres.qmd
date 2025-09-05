@@ -315,9 +315,9 @@ format:
 |:-----------------------------------|:------------|:------------|
 | Text Drift                  | drift sobre los descriptores **Text Length** y **Word Count** aplicados a las columnas **oficio, tareas y actividad** (sólo CAENES). <br> - **Text Length**: largo del texto en caracteres. <br>  - **Word Count**: número de palabras en el texto. | clase, dataset |
 | Embedding Drift             | drift en los **embeddings obtenidos para el dataset de producción y referencia**, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo. |  clase, dataset |
-| Prediction Drift            | drift en las **clases predichas por del modelo**. | dataset |
-| Prediction Drift vs Truth   | drift en las **clases predichas por del modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
-| Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por del modelo**. |  clase, dataset |
+| Prediction Drift            | drift en las **clases predichas por el modelo**. | dataset |
+| Prediction Drift vs Truth   | drift en las **clases predichas por el modelo en el dataset de producción** vs **classes verdaderas en el dataset de referencia**. | dataset |
+| Prediction Class Prob Drift | drift en las **probabilidades de las clases predichas por el modelo**. |  clase, dataset |
 | Record Drift | drift basado en **incerteza y novedad de las glosas**. | registro |
 : {tbl-colwidths="[25,55,20]"}
 
@@ -668,6 +668,20 @@ format:
 ![](imagenes/monitoring/drift_embeddings_pres_01.png){.fragment .fade-in-then-out width="90%"}
 
 ![](imagenes/monitoring/drift_embeddings_pres_02.png){.fragment width="90%"}
+
+:::
+
+
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+- **4) Binary Classifier**: estimación.
+:::
+
+::: {.r-stack fragment-index=2 .center}
+
+![](imagenes/monitoring/roc_curve_estimation_pres.png){.fragment .fade-in-then-out width="80%"}
 
 :::
 
