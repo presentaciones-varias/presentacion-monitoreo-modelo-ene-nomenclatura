@@ -8,7 +8,7 @@
 <link href="pres_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="pres_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="pres_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.55">
+  <meta name="generator" content="quarto-1.5.57">
 
   <title>pres</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -571,39 +571,39 @@
 <col style="width: 20%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Report</th>
 <th style="text-align: left;">Evaluación</th>
 <th style="text-align: left;">Nivel</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Text Drift</td>
 <td style="text-align: left;">drift sobre los descriptores <strong>Text Length</strong> y <strong>Word Count</strong> aplicados a las columnas <strong>oficio, tareas y actividad</strong> (sólo CAENES). <br> - <strong>Text Length</strong>: largo del texto en caracteres. <br> - <strong>Word Count</strong>: número de palabras en el texto.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Embedding Drift</td>
 <td style="text-align: left;">drift en los <strong>embeddings obtenidos para el dataset de producción y referencia</strong>, a partir de los mismos word embeddings pre-entrenados usados en el entrenamiento del modelo.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Drift</td>
 <td style="text-align: left;">drift en las <strong>clases predichas por del modelo</strong>.</td>
 <td style="text-align: left;">dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Prediction Drift vs Truth</td>
 <td style="text-align: left;">drift en las <strong>clases predichas por del modelo en el dataset de producción</strong> vs <strong>classes verdaderas en el dataset de referencia</strong>.</td>
 <td style="text-align: left;">dataset</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Class Prob Drift</td>
 <td style="text-align: left;">drift en las <strong>probabilidades de las clases predichas por del modelo</strong>.</td>
 <td style="text-align: left;">clase, dataset</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Record Drift</td>
 <td style="text-align: left;">drift basado en <strong>incerteza y novedad de las glosas</strong>.</td>
 <td style="text-align: left;">registro</td>
@@ -623,7 +623,7 @@
 <col style="width: 15%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Report</th>
 <th style="text-align: left;">Métrica para evaluar drift</th>
 <th style="text-align: left;">Rango</th>
@@ -631,37 +631,37 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Text Drift</td>
 <td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
 <td style="text-align: left;">[0, +inf] <br> [0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Embedding Drift</td>
 <td style="text-align: left;">- <strong>Binary classifier</strong> para distinguir entre los embeddings calculados desde ambos datasets. <br> - Retorna valores de <strong>ROC AUC como <em>drift_score</em></strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift &gt; 0.55</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Drift</td>
 <td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Prediction Drift vs Truth</td>
 <td style="text-align: left;">- <strong>Jensen-Shannon distance</strong>.</td>
 <td style="text-align: left;">[0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">Prediction Class Prob Drift</td>
 <td style="text-align: left;">- <strong>Wasserstein distance</strong>: modelos a 1 dígito. <br> - <strong>Kolmogorov–Smirnov (K-S) test</strong>: modelos a 2 dígitos.</td>
 <td style="text-align: left;">[0, +inf] <br> [0, 1]</td>
 <td style="text-align: left;">drift ≥ 0.1 <br> drift &lt; 0.05</td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">Record Drift</td>
 <td style="text-align: left;">- uncertainty_score_norm <br> - novelty_score_norm</td>
 <td style="text-align: left;">[0, 1] <br> [0, 1]</td>
@@ -712,7 +712,7 @@
 <col style="width: 16%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th style="text-align: left;">Metric</th>
 <th style="text-align: left;">W</th>
 <th style="text-align: left;">Metric</th>
@@ -721,14 +721,14 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td style="text-align: left;">uncertainty_score_norm <br> novelty_score_norm</td>
 <td style="text-align: left;">0.5 <br> 0.5</td>
 <td style="text-align: left;"><br> <strong>record_drift_score</strong></td>
 <td style="text-align: left;"><br> 0.5</td>
 <td style="text-align: left;"></td>
 </tr>
-<tr>
+<tr class="even">
 <td style="text-align: left;">delta_drift_score_length_oficio_class_norm <br> delta_drift_score_length_tareas_class_norm <br> delta_drift_score_wordcount_oficio_class_norm <br> delta_drift_score_wordcount_tareas_class_norm <br> delta_drift_score_small_embeddings_class_norm <br> delta_drift_score_big_embeddings_class_norm <br> delta_drift_score_prediction_class_probs_class_norm <br> delta_drift_score_length_oficio_global_norm <br> delta_drift_score_length_tareas_global_norm <br> delta_drift_score_wordcount_oficio_global_norm <br> delta_drift_score_wordcount_tareas_global_norm <br> delta_drift_score_small_embeddings_global_norm <br> delta_drift_score_big_embeddings_global_norm <br> delta_drift_score_prediction_global_norm <br> delta_drift_score_prediction_vs_truth_global_norm <br> delta_drift_score_prediction_class_probs_global_norm</td>
 <td style="text-align: left;">0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.08 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04 <br> 0.04</td>
 <td style="text-align: left;"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <strong>class_drift_score</strong></td>
@@ -1053,23 +1053,67 @@
 <li class="fragment"><strong>Uncertainty score:</strong> Es una medida de la baja confianza de los registros del dataset de producción, estimada en base a las probabilidades de predicción del modelo. <span class="math display">\[
 \small uncertainty\_score = 1 - prediction\_probability
 \]</span></li>
-<li class="fragment"><strong>Novelty score:</strong> Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia. <span class="math display">\[
-\small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
-\]</span> <!-- - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
-  1. Aplicar K-Means clustering a los embeddings de los registros de producción.
-  2. Para cada registro, calcular distancia euclidiana a su centroide. --></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="apéndice-metrics-8" class="slide level2">
+<h2><span class="big-par">Apéndice | Metrics</span></h2>
+<div class="medium-par">
+<ul>
+<li class="fragment"><strong>Novelty score:</strong> Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia. <!--   $$ --> <!-- \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2} --> <!-- $$ --></li>
+<li class="fragment">Primer paso: calcular la similitud coseno: <span class="math display">\[
+  cos\_sim(A, B) = (A · B) / (||A|| × ||B||)
+  \]</span> En nuestro caso:
+<ul>
+<li class="fragment">current_vectors = matriz de M × D (M ejemplos actuales, D dimensiones)</li>
+<li class="fragment">reference_vectors = matriz de N × D (N ejemplos de referencia, D dimensiones)</li>
+<li class="fragment">cosine_similarity = matriz de M × N donde cada elemento (i,j) es: <span class="math display">\[
+similarities[i,j] = cos\_sim(current\_vector[i], reference\_vector[j])
+\]</span></li>
+</ul></li>
+<li class="fragment">Luego, para cada ejemplo actual i, encuentra la similitud más alta con cualquier ejemplo de referencia. <span class="math display">\[
+  max\_sim[i] = max(similarities[i,j]) for j ∈ [1, N]
+  \]</span></li>
+<li class="fragment">Segundo paso: calcular la distancia euclidiana entre los datos actuales y los de referencia: <span class="math display">\[
+  euclidean\_dist(A, B) = √[(a₁-b₁)² + (a₂-b₂)² + ... + (aₙ-bₙ)²]
+  \]</span></li>
+<li class="fragment">Luego, calcular la distancia mínima del ejemplo actual i a cualquier ejemplo de referencia <span class="math display">\[
+  min\_dist[i] = min(euclidean\_dist(current[i], reference[j])) for j ∈ [1, N]
+  \]</span> <img data-src="imagenes/monitoring/dist_euclidiana.png" class="fragment" style="width:50.0%"></li>
+<li class="fragment">Se normalizan las distancias: <span class="math display">\[
+  distance\_score[i] = min\_distances[i] / max(min\_distances)
+  \]</span></li>
+<li class="fragment">Finalmente definimos el novelty score como el promedio de ambas señales: <span class="math display">\[
+  novelty\_score[i] = ((1 - max\_sim[i]) + distance\_score[i]) / 2
+  \]</span>
+<ul>
+<li class="fragment">(1 - max_sim[i]): Qué tan DISimilar es (0 = muy similar, 1 = muy diferente)</li>
+<li class="fragment">distance_score[i]: Qué tan lejos está (0 = muy cerca, 1 = muy lejos)</li>
+<li class="fragment">En resumen, la similitud coseno detecta cambios semánticos y la distancia euclidiana cambios de intensidad.</li>
+<li class="fragment">Los ejemplos con scores altos son candidatos para revisión manual por ser potencialmente nuevos.</li>
+</ul></li>
+</ul>
+<p><!-- - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
+    1. Aplicar K-Means clustering a los embeddings de los registros de producción.
+    2. Para cada registro, calcular distancia euclidiana a su centroide. --></p>
+</div>
+</section>
+<section id="apéndice-metrics-9" class="slide level2">
+<h2><span class="big-par">Apéndice | Metrics</span></h2>
+<div class="medium-par">
+<ul>
 <li class="fragment"><strong>Record drift score:</strong>
 <ul>
-<li class="fragment">Se normalizan las tres métricas anteriores usando la fórmula: <br> <span class="math display">\[
+<li class="fragment">Se normalizan el novelty score usando la fórmula: <br> <span class="math display">\[
 \small
-metric\_norm = \frac{metric - min(metric)}{max(metric) - min(metric)}
+novelty\_score\_norm[i] = \frac{novelty\_score[i] - min(novelty\_score)}{max(novelty\_score) - min(novelty\_score)}
 \]</span></li>
 <li class="fragment">Luego usamos las métricas normalizadas para calcular: <span class="math display">\[
 \small record\_drift_\_score = w_1 \times uncertainty\_score\_norm \\
 \small \hspace{4.cm} + w_2 \times novelty\_score\_norm
 \]</span></li>
 <li class="fragment">donde usamos por defecto los pesos: <span class="math display">\[ \small w_1=0.5, w_2=0.5 \]</span></li>
-</ul></li>
 </ul></li>
 </ul>
 </div>

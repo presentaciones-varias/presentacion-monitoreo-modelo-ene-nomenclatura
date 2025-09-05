@@ -681,18 +681,68 @@ format:
   $$
   \small uncertainty\_score = 1 - prediction\_probability
   $$
+:::
+  
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+
   - **Novelty score:** Es una medida de la diferencia semántica entre registros del dataset de producción y referencia. <br> Combina similitud coseno y la mínima distancia euclidiana normalizada calculadas para cada embedding del dataset de producción respecto a todos los embeddings del dataset de referencia.
+  <!--   $$ -->
+  <!-- \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2} -->
+  <!-- $$ -->
+  - Primer paso: calcular la similitud coseno:
   $$
-  \small novelty\_score = \frac{(1 - max\_cosine\_similarity + min\_euclidean\_distance\_norm)}{2}
+  cos\_sim(A, B) = (A · B) / (||A|| × ||B||)
   $$
+  En nuestro caso:
+    - current_vectors = matriz de M × D (M ejemplos actuales, D dimensiones)
+    - reference_vectors = matriz de N × D (N ejemplos de referencia, D dimensiones)
+    - cosine_similarity = matriz de M × N donde cada elemento (i,j) es:
+  $$
+  similarities[i,j] = cos\_sim(current\_vector[i], reference\_vector[j])
+  $$
+  - Luego, para cada ejemplo actual i, encuentra la similitud más alta con cualquier ejemplo de referencia.
+  $$
+  max\_sim[i] = max(similarities[i,j]) for j ∈ [1, N]
+  $$
+  - Segundo paso: calcular la distancia euclidiana entre los datos actuales y los de referencia:
+  $$
+  euclidean\_dist(A, B) = √[(a₁-b₁)² + (a₂-b₂)² + ... + (aₙ-bₙ)²]
+  $$
+  - Luego, calcular la distancia mínima del ejemplo actual i a cualquier ejemplo de referencia
+  $$
+  min\_dist[i] = min(euclidean\_dist(current[i], reference[j])) for j ∈ [1, N]
+  $$
+  ![](imagenes/monitoring/dist_euclidiana.png){.fragment width="50%"}
+  - Se normalizan las distancias:
+  $$
+  distance\_score[i] = min\_distances[i] / max(min\_distances)
+  $$
+  - Finalmente definimos el novelty score como el promedio de ambas señales:
+  $$
+  novelty\_score[i] = ((1 - max\_sim[i]) + distance\_score[i]) / 2
+  $$
+    - (1 - max_sim[i]): Qué tan DISimilar es (0 = muy similar, 1 = muy diferente)
+    - distance_score[i]: Qué tan lejos está (0 = muy cerca, 1 = muy lejos)
+    - En resumen, la similitud coseno detecta cambios semánticos y la distancia euclidiana cambios de intensidad.
+    - Los ejemplos con scores altos son candidatos para revisión manual por ser potencialmente nuevos.
+    
   <!-- - **Diversity score:** Representa la diversidad de los registros en el dataset de producción. Se calcula en base a K-Means clustering, midiendo la distancia de cada registro a su centro de cluster más cercano: 
     1. Aplicar K-Means clustering a los embeddings de los registros de producción.
     2. Para cada registro, calcular distancia euclidiana a su centroide. -->
+:::
+  
+
+## [Apéndice | Metrics]{.big-par}
+
+::: {.incremental .medium-par}
+
   - **Record drift score:**
-    - Se normalizan las tres métricas anteriores usando la fórmula: <br> 
+    - Se normalizan el novelty score usando la fórmula: <br> 
     $$
     \small
-    metric\_norm = \frac{metric - min(metric)}{max(metric) - min(metric)}
+    novelty\_score\_norm[i] = \frac{novelty\_score[i] - min(novelty\_score)}{max(novelty\_score) - min(novelty\_score)}
     $$
     - Luego usamos las métricas normalizadas para calcular:
     $$
@@ -701,5 +751,5 @@ format:
     $$
     - donde usamos por defecto los pesos: 
     $$ \small w_1=0.5, w_2=0.5 $$
-:::
 
+:::
